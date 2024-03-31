@@ -283,7 +283,7 @@ $(function(){
 	}).mouseleave(function(){
 		$(this).removeClass('unfocus');
 		links.removeClass('unfocus');
-	})
+	}) 
 
 
 

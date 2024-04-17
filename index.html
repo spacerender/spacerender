@@ -29,7 +29,13 @@
 
 .btn.btn-bllack {
     background: #ffffff;
-    color: #000000;
+   
+	color: #000000;
+}
+
+.btn.btn-blllack {
+	background: #000000;
+	color: #ffffff;
 }
 .filter-buttons {
   display: flex;
@@ -39,6 +45,8 @@
   max-width: 800px; /* Adjust the max width as needed */
   margin: 0 auto;  /* Center the container horizontally */
 }
+
+
 /* Media Query for Desktop */
 @media (min-width: 768px) { /* Adjust the breakpoint if needed */
   .filter-buttons {
@@ -46,6 +54,21 @@
   }
 }
 
+#load-more {
+    background: #000000;
+	color: #ffffff;
+}
+#load-more:hover {
+	border-color: #000000;
+	background: transparent;
+	color: #000000;
+}
+
+.button-container {
+    display: flex;          /* Enable flexbox */   
+    justify-content: center;/* Center horizontally */
+    width: 100%;            /* Container spans full width */
+ }
 .filter-text {
   /* ... your other styles ... */
   text-decoration: none;  /* Remove default underline initially */
@@ -55,6 +78,23 @@
 .filter-text:hover {
   text-decoration: underline;  /* Underline on hover */
   color: rgb(0, 0, 0); /* Optional: Example of color change on hover */
+}
+
+.certification-section {
+  background-color: black; 
+  padding: 30px; 
+  display: grid;           /* Enable grid layout */
+  place-items: center;     /* Center the content both horizontally and vertically */
+}
+
+
+.certification-content {
+  background-color: white; 
+  padding: 20px;           
+  margin: 20px auto;      /* Center using automatic margins */ 
+  border-radius: 5px;     
+  display: inline-block;  /* Necessary for margin: auto to work horizontally */
+  max-width: 80%;         /* Prevent stretching too wide */
 }
 
 .filter-buttons button.active {
@@ -81,6 +121,7 @@
 		.item:hover .overlay {
 			display: block;
 		}
+		
 	</style>
 
 </head>
@@ -253,6 +294,9 @@
 						</a>
 					</div>
 				</div>
+				<div class="button-container">
+				<button id="load-more" class="btn btn-blllack" >Load More</button>
+			</div>
 			</div>
 
 		</div>
@@ -380,23 +424,32 @@
 					<li class="position">OctaneRender | Redshift | Cycles | Eevee | Arnold Render | D5 | V-Ray | Corona | Twinmotion | Keyshot | Maxwell</li>
 				</ul>
 				
-				<div class="col-12">
-					<br>
-					<br>
-					<h3 class="text-black h5 font-weight-bold mb-3 gsap-reveal-hero">Certification</h3>
-				</div>
+				
+				
+			  </div>
 
-				<ul style="list-style-type:disc">
-					<li class="position">Interior Design With Curves Mastering</li>
-					<li class="position">Light : Architectural Design & Interior Decoration</li>
-					<li class="position">Adobe Photoshop Complete Mastery</li>
-					<li class="position">3D Visualization For Beginners: Interior Scene with 3ds Max</li>
-					<li class="position">How to Use Color Like a Pro</li>
-					<li class="position">Interior Design With Curves Mastering</li>
+			  <div class="certification-section">  
+				<div class="certification-content">  
+					<div class="col-12"> 
+				<br> <br> 
+				<h3 class="text-black h5 font-weight-bold mb-3 gsap-reveal-hero">Certification</h3>
+			  </div>
+			  <ul style="list-style-type:disc">
+				<li class="position">Interior Design With Curves Mastering</li>
+				<li class="position">Light : Architectural Design & Interior Decoration</li>
+				<li class="position">Adobe Photoshop Complete Mastery</li>
+				<li class="position">3D Visualization For Beginners: Interior Scene with 3ds Max</li>
+				<li class="position">How to Use Color Like a Pro</li>
+				<li class="position">Interior Design With Curves Mastering</li>
 				</ul>
 			</div>
+			</div>
+
+			
 		</div>
+		
 	</div>
+	
 
 
 	<div class="untree_co-section" id="contact-section">
@@ -478,6 +531,11 @@
 			</div>
 		</div>
 	</div>
+	<script>
+	var lazyLoadInstance = new LazyLoad({
+		// Your custom settings go here
+	  });
+	</script>
 	<script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.0.5/dist/lazyload.min.js"></script>
 	<script src="js/jquery-3.4.1.min.js"></script>
 	<script src="js/popper.min.js"></script>
@@ -529,6 +587,45 @@ filterTexts.forEach(filterText => {
     filterText.classList.add('active');
   });
 });	
+</script>
+<script>
+const loadMoreBtn = document.getElementById('load-more');
+const postsContainer = document.getElementById('posts'); 
+let currentImageIndex = 0; 
+const imagesPerLoad = 10; // Load 10 images at a time
+
+// Your source of additional images 
+const moreImages = [ 
+   { src: "images/web/3.jpg", classes: "item web photography creative" },
+   { src: "images/web/4.jpg", classes: "item web branding natural" },
+   // ... more image objects
+ ]; 
+
+loadMoreBtn.addEventListener('click', () => {
+    const end = Math.min(currentImageIndex + imagesPerLoad, moreImages.length); 
+    const imagesToLoad = moreImages.slice(currentImageIndex, end); 
+
+    imagesToLoad.forEach(image => {
+       const newImageItem = `
+          <div class="${image.classes} col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+              <a href="${image.src}" data-fancybox="project-gallery">
+                  <img src="${image.src}" class="lazyload img-fluid" alt="Images" />
+                  <div class="overlay">
+                      <p class="overlay-text">Your text here</p>
+                  </div>
+              </a>
+          </div>
+       `;
+       postsContainer.innerHTML += newImageItem;
+    });
+
+    currentImageIndex = end;
+
+    if (currentImageIndex >= moreImages.length) {
+        loadMoreBtn.style.display = 'none'; 
+    }
+});
+
 </script>
 </body>
 

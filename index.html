@@ -46,9 +46,20 @@
   }
 }
 
+.filter-text {
+  /* ... your other styles ... */
+  text-decoration: none;  /* Remove default underline initially */
+  cursor: pointer;
+}
+
+.filter-text:hover {
+  text-decoration: underline;  /* Underline on hover */
+  color: rgb(0, 0, 0); /* Optional: Example of color change on hover */
+}
+
 .filter-buttons button.active {
     background-color: #ffffff;
-    color: black;
+    color: #ff2e63;
 }
 		.overlay {
 			position: absolute;
@@ -126,12 +137,12 @@
 		<div class="container">
 
 			<div class="filter-buttons">
-				<button class="btn btn-bllack" data-filter="all">ALL</button>
-				<button class="btn btn-bllack" data-filter="natural">NATURAL</button>
-				<button class="btn btn-bllack" data-filter="creative">CREATIVE</button>
-				<button class="btn btn-bllack" data-filter="personal">PERSONAL</button>
-				<button class="btn btn-bllack" data-filter="photography">PHOTOGRAPHY</button>
-			  </div>
+				<span class="filter-text" data-filter="all">ALL</span>
+				<span class="filter-text" data-filter="natural">NATURAL</span>
+				<span class="filter-text" data-filter="creative">CREATIVE</span>
+				<span class="filter-text" data-filter="personal">PERSONAL</span>
+				<span class="filter-text" data-filter="photography">PHOTOGRAPHY</span>
+			</div>
 		
 <div><br></div>
 			<div class="relative">
@@ -496,12 +507,14 @@
 
 		</script>
 <script>
-const filterButtons = document.querySelectorAll('.filter-buttons button');
+const filterTexts = document.querySelectorAll('.filter-text'); 
 const portfolioItems = document.querySelectorAll('.item');
 
-filterButtons.forEach(button => {
-  button.addEventListener('click', (e) => {
-    const filter = e.target.dataset.filter;
+filterTexts.forEach(filterText => {
+  filterText.addEventListener('click', (e) => {
+    console.log("Filter clicked:", e.target.dataset.filter); // Check that it works
+
+    const filter = e.target.dataset.filter; 
 
     portfolioItems.forEach(item => {
       if (filter === 'all' || item.classList.contains(filter)) {
@@ -512,10 +525,10 @@ filterButtons.forEach(button => {
     });
 
     // Add active class to selected button 
-    filterButtons.forEach(btn => btn.classList.remove('active'));
-    button.classList.add('active');
+    filterTexts.forEach(text => text.classList.remove('active'));
+    filterText.classList.add('active');
   });
-});		
+});	
 </script>
 </body>
 

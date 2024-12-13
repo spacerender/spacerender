@@ -26,7 +26,6 @@ body.offcanvas-menu:before {
 	opacity: 1;
 	visibility: visible;
 }
-
 /* Scoped Preloader Styles */
 #preloader {
     position: fixed;
@@ -123,7 +122,6 @@ body.offcanvas-menu:before {
 #preloader .flip-next.animate {
     transform: rotateX(0);
 }
-
 
 .text-black {
 	color: #000000 !important;

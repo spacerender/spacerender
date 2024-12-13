@@ -726,23 +726,22 @@ window.onload = () => {
     setTimeout(() => {
         currentYear.textContent = '2024';
     }, 1500); // Update after animation ends
-};
 
-
-document.addEventListener("DOMContentLoaded", () => {
     // Simulate loading delay (adjust/remove for production)
     setTimeout(() => {
         const preloader = document.getElementById("preloader");
         if (preloader) {
-            // Fade out the preloader
-            preloader.style.opacity = "0";
-            preloader.style.transition = "opacity 0.5s ease";
-            
-            // Remove the preloader after fade-out
-            setTimeout(() => preloader.remove(), 500);
+            // Fade out the preloader after the flip animation and delay of 2 seconds
+            setTimeout(() => {
+                preloader.style.opacity = "0";
+                preloader.style.transition = "opacity 0.5s ease";
+                
+                // Remove the preloader after fade-out, with an additional 2-second delay
+                setTimeout(() => preloader.remove(), 2000); // Keep preloader for 2 seconds after animation
+            }, 2000); // Delay for 2 seconds after everything is loaded and flip animation
         }
-    }, 2000); // Simulated 2-second delay
-});
+    }, 1000); // 3500ms to delay the start of fade-out after flip animation
+};
 </script>
 
 </body>

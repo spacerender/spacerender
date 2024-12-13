@@ -996,7 +996,7 @@ figure.dotted-bg:before {
 .experience-wrap .experience {
 	background: #ff2e63;
 	padding: 20px;
-	color: #ffffff;
+	color: #000000;
 	padding-left: 30px;
 }
 
@@ -1006,7 +1006,7 @@ figure.dotted-bg:before {
 
 .experience-wrap .experience>a {
 	display: block;
-	color: #ffffff;
+	color: #000000;
 }
 
 .loader-portfolio-wrap {

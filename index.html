@@ -127,6 +127,19 @@
 </head>
 
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="100" style="background-color:rgb(0, 0, 0);">
+	<div id="preloader">
+        <div class="preloader-content">
+            <h1>Vijay Sharma</h1>
+            <h2>Interior & Graphic Designer</h2>
+            <div class="year-container">
+                <span class="year">20</span>
+                <div class="flip-container">
+                    <div class="flip">18</div>
+                    <div class="flip-next">24</div>
+                </div>
+            </div>
+        </div>
+    </div>
 	<div class="site-mobile-menu site-navbar-target">
 		<div class="site-mobile-menu-header">
 			<div class="site-mobile-menu-close">
@@ -695,6 +708,40 @@ loadMoreBtn.addEventListener('click', () => {
 </script>
 
 
+<script>
+// Flip the year from 18 to 24
+window.onload = () => {
+    const flip = document.querySelector('.flip');
+    const flipNext = document.querySelector('.flip-next');
+    const currentYear = document.querySelector('.current-year');
+
+    setTimeout(() => {
+        flip.classList.add('animate');
+        flipNext.classList.add('animate');
+    }, 1000); // Delay for 1 second to trigger the animation
+
+    // Update copyright text after animation
+    setTimeout(() => {
+        currentYear.textContent = '2024';
+    }, 1500); // Update after animation ends
+};
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Simulate loading delay (adjust/remove for production)
+    setTimeout(() => {
+        const preloader = document.getElementById("preloader");
+        if (preloader) {
+            // Fade out the preloader
+            preloader.style.opacity = "0";
+            preloader.style.transition = "opacity 0.5s ease";
+            
+            // Remove the preloader after fade-out
+            setTimeout(() => preloader.remove(), 500);
+        }
+    }, 2000); // Simulated 2-second delay
+});
+</script>
 
 </body>
 

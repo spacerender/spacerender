@@ -18,10 +18,8 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
 	<title>Portflio Space</title>
-	<style>
-	
-	
-	/* Initially hide the new content */
+<style>
+/* Initially hide the new content */
 .item {
     opacity: 0;
     transform: translateY(20px); /* Start the items lower for the sliding effect */
@@ -34,7 +32,7 @@
     transform: translateY(0); /* Slide into place */
 }
 
-/* Optional: To animate the whole section as it slides down, you can use this */
+/* Optional: To animate the whole section as it slides down */
 #posts {
     overflow: hidden;
 }
@@ -53,13 +51,12 @@
     transform: translateY(0);
 }
 
-	/* Ensure that items and images are initially hidden */
+/* Fade in effect when the item comes into view */
 .item img, .item video {
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
 
-/* Fade in effect when the item comes into view */
 .item.visible img, .item.visible video {
     opacity: 1;
 }
@@ -75,7 +72,7 @@ body {
   will-change: opacity;  /* Hints the browser to prepare for opacity change */
 }
 
-/* Optional: You can also control the width of images to ensure they are responsive and do not exceed the screen size */
+/* Optional: Responsive images */
 .item img {
   max-width: 100%;
   height: auto;
@@ -86,9 +83,7 @@ body {
   overflow-x: hidden; /* Avoid horizontal scrolling */
 }
 
-	
-	
-		/* Basic styling (Customize as needed!) */
+/* Basic styling (Customize as needed!) */
 .filter-buttons button {
   margin: 10px;
   padding: 8px 15px;
@@ -97,16 +92,6 @@ body {
   cursor: pointer;
 }
 
-.btn.btn-bllack {
-    background: #ffffff;
-   
-	color: #000000;
-}
-
-.btn.btn-blllack {
-	background: #000000;
-	color: #ffffff;
-}
 .filter-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -116,9 +101,8 @@ body {
   margin: 0 auto;  /* Center the container horizontally */
 }
 
-
 /* Media Query for Desktop */
-@media (min-width: 768px) { /* Adjust the breakpoint if needed */
+@media (min-width: 768px) {
   .filter-buttons {
     gap: 5px; 
   }
@@ -126,73 +110,78 @@ body {
 
 #load-more {
     background: #000000;
-	color: #ffffff;
+    color: #ffffff;
 }
+
 #load-more:hover {
-	border-color: #000000;
-	background: transparent;
-	color: #000000;
+    border-color: #000000;
+    background: transparent;
+    color: #000000;
 }
 
 .button-container {
-    display: flex;          /* Enable flexbox */   
-    justify-content: center;/* Center horizontally */
-    width: 100%;            /* Container spans full width */
- }
+    display: flex; /* Enable flexbox */   
+    justify-content: center; /* Center horizontally */
+    width: 100%; /* Container spans full width */
+}
+
+/* Filter text hover effect */
 .filter-text {
-  /* ... your other styles ... */
-  text-decoration: none;  /* Remove default underline initially */
+  text-decoration: none;
   cursor: pointer;
 }
 
 .filter-text:hover {
-  text-decoration: underline;  /* Underline on hover */
-  color: rgb(0, 0, 0); /* Optional: Example of color change on hover */
+  text-decoration: underline;
+  color: rgb(0, 0, 0);
 }
 
+/* Certification Section Styling */
 .certification-section {
-  background-color: black; 
-  padding: 30px; 
-  display: grid;           /* Enable grid layout */
-  place-items: center;     /* Center the content both horizontally and vertically */
+  background-color: black;
+  padding: 30px;
+  display: grid;
+  place-items: center;
 }
-
 
 .certification-content {
-  background-color: white; 
-  padding: 20px;           
-  margin: 20px auto;      /* Center using automatic margins */ 
-  border-radius: 5px;     
-  display: inline-block;  /* Necessary for margin: auto to work horizontally */
-  max-width: 80%;         /* Prevent stretching too wide */
+  background-color: white;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 5px;
+  display: inline-block;
+  max-width: 80%;
 }
 
+/* Active filter button style */
 .filter-buttons button.active {
     background-color: #ffffff;
     color: #ff2e63;
 }
-		.overlay {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba(0, 0, 0, 0.5);
-			display: none;
-		}
 
-		.overlay-text {
-			color: white;
-			font-size: 20px;
-			text-align: center;
-			margin-top: 50%;
-		}
+/* Overlay Styling */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+}
 
-		.item:hover .overlay {
-			display: block;
-		}
-		
-	</style>
+.overlay-text {
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 50%;
+}
+
+.item:hover .overlay {
+    display: block;
+}
+
+</style>
 
 </head>
 

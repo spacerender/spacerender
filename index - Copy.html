@@ -19,75 +19,6 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
 	<title>Portflio Space</title>
 	<style>
-	
-	
-	/* Initially hide the new content */
-.item {
-    opacity: 0;
-    transform: translateY(20px); /* Start the items lower for the sliding effect */
-    transition: opacity 0.5s ease, transform 0.5s ease; /* Transition for opacity and slide */
-}
-
-/* When the item becomes visible */
-.item.visible {
-    opacity: 1;
-    transform: translateY(0); /* Slide into place */
-}
-
-/* Optional: To animate the whole section as it slides down, you can use this */
-#posts {
-    overflow: hidden;
-}
-
-/* Add a wrapper for animation to make content appear smoothly */
-.item-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.item-wrapper.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-	/* Ensure that items and images are initially hidden */
-.item img, .item video {
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-}
-
-/* Fade in effect when the item comes into view */
-.item.visible img, .item.visible video {
-    opacity: 1;
-}
-
-/* Font optimization */
-body {
-  font-family: 'YourFont', sans-serif;
-  font-display: swap; /* Ensures text is visible until fonts are loaded */
-}
-
-/* Performance optimization */
-.item img, .item video {
-  will-change: opacity;  /* Hints the browser to prepare for opacity change */
-}
-
-/* Optional: You can also control the width of images to ensure they are responsive and do not exceed the screen size */
-.item img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Overall container optimization */
-.container {
-  overflow-x: hidden; /* Avoid horizontal scrolling */
-}
-
-	
-	
 		/* Basic styling (Customize as needed!) */
 .filter-buttons button {
   margin: 10px;
@@ -479,14 +410,6 @@ body {
 							</div>
 						</a>
 					</div>
-					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
-						<a href="images/hires/49.jpg" data-fancybox="project-gallery"> <img src="images/lowres/49.webp"
-								class="lazyload img-fluid" alt="Images" />
-							<div class="overlay">
-								<p class="overlay-text">View</p>
-							</div>
-						</a>
-					</div>
 				</div>
 				<div class="button-container">
 				<button id="load-more" class="btn btn-blllack" >Load More</button>
@@ -711,31 +634,12 @@ filterTexts.forEach(filterText => {
 });	
 </script>
 <script>
-// Intersection Observer to make the content visible when in the viewport (no changes needed)
-const observer = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target); // Stop observing once it becomes visible
-    }
-  });
-}, {
-  root: null,
-  threshold: 0.1  // Trigger when 10% of the element is visible
-});
-
-// Initial observation of portfolio items
-const items = document.querySelectorAll('.item');
-items.forEach(item => {
-  observer.observe(item);
-});
-
-// Handling the "Load More" functionality with animation
 const loadMoreBtn = document.getElementById('load-more');
 const postsContainer = document.getElementById('posts'); 
-let currentImageIndex = 0;
-const imagesPerLoad = 9; // Number of items to load per click
+let currentImageIndex = 0; 
+const imagesPerLoad = 10; // Load 10 images at a time
 
+// Your source of additional images 
 const moreImages = [ 
    { lowRes: "images/lowres/13.webp", highRes: "images/hires/13.jpg", classes: "item web photography creative" },
    { lowRes: "images/lowres/14.webp", highRes: "images/hires/14.jpg", classes: "item web branding natural" },
@@ -773,18 +677,16 @@ const moreImages = [
    { lowRes: "images/lowres/46.webp", highRes: "images/hires/46.jpg", classes: "item web branding natural" },
    { lowRes: "images/lowres/47.webp", highRes: "images/hires/47.jpg", classes: "item web branding natural" },
    { lowRes: "images/lowres/48.webp", highRes: "images/hires/48.jpg", classes: "item web branding natural" },
-];
+   { lowRes: "images/lowres/49.webp", highRes: "images/hires/49.jpg", classes: "item web branding natural" },
+   
+   
+   // Add more lowRes/highRes pairs here
+]; 
 
-// Handle the "Load More" button click event
 loadMoreBtn.addEventListener('click', () => {
-    const end = Math.min(currentImageIndex + imagesPerLoad, moreImages.length);
-    const imagesToLoad = moreImages.slice(currentImageIndex, end);
+    const end = Math.min(currentImageIndex + imagesPerLoad, moreImages.length); 
+    const imagesToLoad = moreImages.slice(currentImageIndex, end); 
 
-    // Create a wrapper for new images to animate as a group
-    const newWrapper = document.createElement('div');
-    newWrapper.classList.add('item-wrapper'); 
-
-    // Append new images inside the wrapper
     imagesToLoad.forEach(image => {
        const newImageItem = `
           <div class="${image.classes} col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
@@ -796,32 +698,16 @@ loadMoreBtn.addEventListener('click', () => {
               </a>
           </div>
        `;
-       newWrapper.innerHTML += newImageItem;
-    });
-
-    // Add the new images to the posts container
-    postsContainer.appendChild(newWrapper);
-
-    // Trigger the animation by adding the 'visible' class
-    setTimeout(() => {
-        newWrapper.classList.add('visible');
-    }, 50);
-
-    // Re-observe newly added images
-    const newItems = newWrapper.querySelectorAll('.item');
-    newItems.forEach(item => {
-      observer.observe(item);
+       postsContainer.innerHTML += newImageItem;
     });
 
     currentImageIndex = end;
 
-    // Hide the "Load More" button if there are no more images
     if (currentImageIndex >= moreImages.length) {
-        loadMoreBtn.style.display = 'none';
+        loadMoreBtn.style.display = 'none'; 
     }
 });
 </script>
-
 
 
 <script>

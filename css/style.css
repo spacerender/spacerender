@@ -1234,10 +1234,10 @@ figure.dotted-bg:before {
 }
 
 .work-experience .position {
-	font-size: 16px;
-	font-weight: 700;
-	color: #000000;
-	margin-bottom: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #e1e1e1;
+    margin-bottom: 0;
 }
 
 .work-experience .company {

@@ -1,0 +1,853 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content />
+	<meta name="keywords" content />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+
+	<link rel="stylesheet" href="css/owl.carousel.min.css">
+	<link rel="stylesheet" href="css/owl.theme.default.min.css">
+	<link rel="stylesheet" href="fonts/icomoon/style.css">
+	<link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
+	<link rel="stylesheet" href="css/aos.css">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+	<title>Portflio Space</title>
+<style>
+/* Initially hide the new content */
+.item {
+    opacity: 0;
+    transform: translateY(20px); /* Start the items lower for the sliding effect */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Transition for opacity and slide */
+}
+
+/* When the item becomes visible */
+.item.visible {
+    opacity: 1;
+    transform: translateY(0); /* Slide into place */
+}
+
+/* Optional: To animate the whole section as it slides down */
+#posts {
+    overflow: hidden;
+}
+
+/* Add a wrapper for animation to make content appear smoothly */
+.item-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.item-wrapper.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Fade in effect when the item comes into view */
+.item img, .item video {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.item.visible img, .item.visible video {
+    opacity: 1;
+}
+
+/* Font optimization */
+body {
+  font-family: 'YourFont', sans-serif;
+  font-display: swap; /* Ensures text is visible until fonts are loaded */
+}
+
+/* Performance optimization */
+.item img, .item video {
+  will-change: opacity;  /* Hints the browser to prepare for opacity change */
+}
+
+/* Optional: Responsive images */
+.item img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Overall container optimization */
+.container {
+  overflow-x: hidden; /* Avoid horizontal scrolling */
+}
+
+/* Basic styling (Customize as needed!) */
+.filter-buttons button {
+  margin: 10px;
+  padding: 8px 15px;
+  border: none;
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 10px;
+  max-width: 800px; /* Adjust the max width as needed */
+  margin: 0 auto;  /* Center the container horizontally */
+}
+
+/* Media Query for Desktop */
+@media (min-width: 768px) {
+  .filter-buttons {
+    gap: 5px; 
+  }
+}
+
+#load-more {
+    background: #ffffff;
+    color: #000000;
+}
+
+#load-more:hover {
+    border-color: #000000;
+    background: transparent;
+    color: #000000;
+}
+
+.button-container {
+    display: flex; /* Enable flexbox */   
+    justify-content: center; /* Center horizontally */
+    width: 100%; /* Container spans full width */
+}
+
+/* Filter text hover effect */
+.filter-text {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.filter-text:hover {
+  text-decoration: underline;
+  color: rgb(0, 0, 0);
+}
+
+/* Certification Section Styling */
+.certification-section {
+  background-color: black;
+  padding: 30px;
+  display: grid;
+  place-items: center;
+}
+
+.certification-content {
+  background-color: white;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 5px;
+  display: inline-block;
+  max-width: 80%;
+}
+
+/* Active filter button style */
+.filter-buttons button.active {
+    background-color: #ffffff;
+    color: #ff2e63;
+}
+
+/* Overlay Styling */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.overlay-text {
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 50%;
+}
+
+.item:hover .overlay {
+    display: block;
+}
+
+</style>
+
+</head>
+
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="100" style="background-color:rgb(0, 0, 0);">
+	<div id="preloader">
+    <div class="preloader-content">
+        <h1 class="preloader-title">Vijay Sharma</h1>
+        <h2 class="preloader-subtitle">Interior & Graphic Designer</h2>
+        <div class="year-container">
+            <span class="copyright-icon">&copy; </span> <!-- Copyright Icon -->
+            <span class="year">20</span>
+            <div class="flip-container">
+                <div class="flip">18</div>
+                <div class="flip-next">24</div>
+            </div>
+        </div>
+    </div>
+</div>
+	<div class="site-mobile-menu site-navbar-target">
+		<div class="site-mobile-menu-header">
+			<div class="site-mobile-menu-close">
+				<span class="icofont-close js-menu-toggle"></span>
+			</div>
+		</div>
+		<div class="site-mobile-menu-body"></div>
+	</div>
+	<nav class="site-nav dark mb-5 site-navbar-target">
+		<div class="container">
+			<div class="site-navigation">
+				<a href="index-2.html" class="logo m-0">Portfolio<span class="text-primary">.</span></a>
+				<ul class="js-clone-nav d-none d-lg-inline-none site-menu float-right site-nav-wrap">
+					<li><a href="#home-section" class="nav-link active">Home</a></li>
+					<li><a href="#portfolio-section" class="nav-link">Portfolio</a></li>
+					<!-- <li><a href="#services-section" class="nav-link">Services</a></li>-->
+					<li class="has-children">
+						<a href="#about-section" class="nav-link">About</a>
+						<!-- <ul class="dropdown">
+							<li><a href="elements.html" class="nav-link">Elements</a></li>
+							
+							<li><a href="#" class="nav-link">Menu Three</a></li>
+						</ul> -->
+					</li>
+					<li><a href="#contact-section" class="nav-link">Contact us</a></li>
+				</ul>
+				<a href="#"
+					class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-inline-block"
+					data-toggle="collapse" data-target="#main-navbar">
+					<span></span>
+				</a>
+			</div>
+		</div>
+	</nav>
+	<!-- <div class="untree_co-section pb-0" id="home-section">
+		<div class="container">
+			<h1 class="heading gsap-reveal-hero mb-0">Hey! I'm <strong>Vijay</strong><span
+					class="text-primary">.</span></strong>
+			</h1>
+			<h2 class="subheading gsap-reveal-hero mb-4">
+				Experience the elegance and sophistication of my work showcased through a sleek and minimalistic design
+				by <strong>Vijay Sharma</strong>.
+			</h2>
+			<p class="gsap-reveal-hero"><a href="#contact-section" target="_blank" class="btn btn-black">Lets Work
+					Together.</a></p>
+		</div>
+	</div> -->
+	<div class="untree_co-section untree_co-section-4 pb-0" id="portfolio-section">
+		<div class="container">
+
+			<div class="filter-buttons">
+				<span class="filter-text" data-filter="all">ALL</span>
+				<span class="filter-text" data-filter="natural">NATURAL</span>
+				<span class="filter-text" data-filter="creative">CREATIVE</span>
+				<span class="filter-text" data-filter="personal">PERSONAL</span>
+				<span class="filter-text" data-filter="photography">PHOTOGRAPHY</span>
+			</div>
+		
+<div><br></div>
+			<div class="relative">
+				<div class="loader-portfolio-wrap">
+					<div class="loader-portfolio"></div>
+				</div>
+			</div>
+			<div id="portfolio-single-holder"></div>
+			<div class="portfolio-wrapper">
+				<div id="posts" class="row">
+
+					<div class="item web branding natural col-sm-6 col-md-6 col-lg-4 isotope-mb-2"> <a href="images/hires/1.jpg"
+							data-fancybox="project-gallery"> <img src="images/lowres/1.webp" class="lazyload img-fluid"
+								alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+
+					<div class="item web branding photography col-sm-6 col-md-6 col-lg-4 isotope-mb-2"> <a href="images/hires/2.jpg"
+							data-fancybox="project-gallery"> <img src="images/lowres/2.webp" class="lazyload img-fluid"
+								alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2"> <a href="images/hires/3.jpg"
+							data-fancybox="project-gallery"> <img src="images/lowres/3.webp" class="lazyload img-fluid"
+								alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding video col-sm-6 col-md-6 col-lg-4 isotope-mb-2"> 
+						<a href="images/lowres/pp1.mp4" data-fancybox="project-gallery"> 
+							<video class="lazyload img-fluid" autoplay muted loop>
+								<source src="images/hires/pp1.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding video col-sm-6 col-md-6 col-lg-4 isotope-mb-2"> 
+						<a href="images/lowres/pp.mp4" data-fancybox="project-gallery"> 
+							<video class="lazyload img-fluid" autoplay muted loop>
+								<source src="images/lowres/pp.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding video col-sm-6 col-md-6 col-lg-4 isotope-mb-2"> 
+						<a href="images/lowres/pp2.mp4" data-fancybox="project-gallery"> 
+							<video class="lazyload img-fluid" autoplay muted loop>
+								<source src="images/lowres/pp2.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding pdf col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/1.pdf" data-fancybox="project-gallery" target="_blank">
+							<img src="images/1.avif" class="lazyload img-fluid" alt="PDF File" />
+							<div class="overlay">
+								<p class="overlay-text">View PDF</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding pdf col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/2.pdf" data-fancybox="project-gallery" target="_blank">
+							<img src="images/2.avif" class="lazyload img-fluid" alt="PDF File" />
+							<div class="overlay">
+								<p class="overlay-text">View PDF</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding pdf col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/4.pdf" data-fancybox="project-gallery" target="_blank">
+							<img src="images/4.avif" class="lazyload img-fluid" alt="PDF File" />
+							<div class="overlay">
+								<p class="overlay-text">View PDF</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding pdf col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/5.pdf" data-fancybox="project-gallery" target="_blank">
+							<img src="images/5.avif" class="lazyload img-fluid" alt="PDF File" />
+							<div class="overlay">
+								<p class="overlay-text">View PDF</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding pdf col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/6.pdf" data-fancybox="project-gallery" target="_blank">
+							<img src="images/6.avif" class="lazyload img-fluid" alt="PDF File" />
+							<div class="overlay">
+								<p class="overlay-text">View PDF</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding pdf col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/7.pdf" data-fancybox="project-gallery" target="_blank">
+							<img src="images/7.avif" class="lazyload img-fluid" alt="PDF File" />
+							<div class="overlay">
+								<p class="overlay-text">View PDF</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding video col-sm-6 col-md-6 col-lg-4 isotope-mb-2"> 
+						<a href="images/lowres/pp3.mp4" data-fancybox="project-gallery"> 
+							<video class="lazyload img-fluid" autoplay muted loop>
+								<source src="images/lowres/pp3.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding video col-sm-6 col-md-6 col-lg-4 isotope-mb-2"> 
+						<a href="images/lowres/pp4.mp4" data-fancybox="project-gallery"> 
+							<video class="lazyload img-fluid" autoplay muted loop>
+								<source src="images/lowres/pp4.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/hires/4.jpg" data-fancybox="project-gallery"> <img src="images/lowres/4.webp"
+								class="lazyload img-fluid" alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/hires/5.jpg" data-fancybox="project-gallery"> <img src="images/lowres/5.webp"
+								class="lazyload img-fluid" alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/hires/6.jpg" data-fancybox="project-gallery"> <img src="images/lowres/6.webp"
+								class="lazyload img-fluid" alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/hires/7.jpg" data-fancybox="project-gallery"> <img src="images/lowres/7.webp"
+								class="lazyload img-fluid" alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/hires/8.jpg" data-fancybox="project-gallery"> <img src="images/lowres/8.webp"
+								class="lazyload img-fluid" alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/hires/9.jpg" data-fancybox="project-gallery"> <img src="images/lowres/9.webp"
+								class="lazyload img-fluid" alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/hires/10.jpg" data-fancybox="project-gallery"> <img src="images/lowres/10.webp"
+								class="lazyload img-fluid" alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/hires/11.jpg" data-fancybox="project-gallery"> <img src="images/lowres/11.webp"
+								class="lazyload img-fluid" alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/hires/12.jpg" data-fancybox="project-gallery"> <img src="images/lowres/12.webp"
+								class="lazyload img-fluid" alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+					<div class="item web branding col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+						<a href="images/hires/49.jpg" data-fancybox="project-gallery"> <img src="images/lowres/49.webp"
+								class="lazyload img-fluid" alt="Images" />
+							<div class="overlay">
+								<p class="overlay-text">View</p>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="button-container">
+				<button id="load-more" class="btn btn-blllack" >Load More</button>
+			</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="untree_co-section pb-0" id="about-section">
+		<div class="container">
+			<div class="row mb-4">
+				<div class="col-lg-6 text-left">
+					<h2 class="section-heading gsap-reveal-hero mb-0"><strong>About</strong></h2>
+					<p class="gsap-reveal-hero">Junior Interior Designer</p>
+					<div class="wave gsap-reveal-hero">
+						<svg>
+							<path d="M10,10 L50,100 L90,50"></path>
+						</svg>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6 position-relative">
+					<div class="experience-wrap gsap-reveal-hero">
+						<div class="experience">
+							<span class="d-block">2 Years of experience</span>
+							<a href="#portfolio-section" class="smoothscroll"> <span class="icon-arrow_forward"></span>
+								See portfolio</a>
+							<a href="#"><span class="icon-arrow_forward"></span> Download my CV</a>
+						</div>
+					</div>
+					<figure class="dotted-bg gsap-reveal-img">
+						<img src="images/about_pic.jpg" alt="Image" class="img-fluid">
+					</figure>
+				</div>
+				<div class="col-lg-6 pl-md-5">
+					<h3 class="text-black h5 font-weight-bold mb-3 gsap-reveal-hero">Bio</h3>
+					<p class="gsap-reveal-hero">I am Vijay Sharma B.Des (Interior Designer),
+						Passionate about using software skills. A
+						creative vision to create beautiful and
+						functional interior spaces.</p>
+					<!-- <p class="gsap-reveal-hero ">A small river named Duden flows by their place and supplies it with the
+						necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly
+						into your mouth.</p> -->
+					<div class="row my-5">
+						<div class="col-12">
+							<h3 class="text-black h5 font-weight-bold mb-3 gsap-reveal-hero">Work Experience</h3>
+						</div>
+						<div class="col-lg-6">
+							<div class="work-experience gsap-reveal-hero">
+								<h3 class="position">Senior Interior Designer</h3>
+								<span class="company">Montdor Interior Pvt Ltd</span>
+								<span class="year">5 Months</span>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="work-experience gsap-reveal-hero">
+								<h3 class="position">Junior Interior Designer</h3>
+								<span class="company">Montdor Interior Pvt Ltd</span>
+								<span class="year">15 Months</span>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="work-experience gsap-reveal-hero">
+								<h3 class="position">Intern </h3>
+								<span class="company">SPACEGENICS</span>
+								<span class="year">6 Months</span>
+							</div>
+						</div>
+						
+					</div>
+						
+						
+					</div>
+					
+				</div>
+				
+
+			  
+			  
+			</div>
+			</div>
+
+			
+		</div>
+		
+	</div>
+	
+
+
+	<div class="untree_co-section" id="contact-section">
+		<div class="container">
+			<div class="row mb-5">
+				<div class="col-lg-7 text-center mx-auto">
+					<h2 class="section-heading gsap-reveal-hero mb-0"><strong>Contact</strong></h2>
+					<p class="gsap-reveal-hero">Available for work. Get in touch</p>
+					<div class="wave gsap-reveal-hero">
+						<svg>
+							<path d="M10,10 L50,100 L90,50"></path>
+						</svg>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6">
+					<form action="#">
+						<div class="row">
+							<div class="col-lg-6 form-group">
+								<input type="text" class="form-control" placeholder="Firstname">
+							</div>
+							<div class="col-lg-6 form-group">
+								<input type="text" class="form-control" placeholder="Lastname">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12 form-group">
+								<input type="email" class="form-control" placeholder="Email address">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12 form-group">
+								<textarea name id cols="30" rows="7" class="form-control"
+									placeholder="Write your message..."></textarea>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12 form-group">
+								<input type="submit" class="btn btn-black" value="Send Message">
+							</div>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="site-footer">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-3">
+					<div class="widget">
+						<h3>Connect</h3>
+						<ul class="list-unstyled social">
+							<li><a href="https://instagram.com/vijay.3d_"><span class="icon-instagram"></span></a></li>
+							<li><a href="https://www.linkedin.com/in/vijay-sharma-a97965239/"><span class="icon-linkedin"></span></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="row mt-5">
+				<div class="col-12 text-center">
+					<p>
+
+						Copyright &copy;
+						<script data-cfasync="false"
+							src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+						<script>document.write(new Date().getFullYear());</script> All rights reserved | This is
+						portfolio Website <i class="icon-heart text-danger" aria-hidden="true"></i> by <a href="#"
+							target="_blank">Vijay Sharma</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+	var lazyLoadInstance = new LazyLoad({
+		// Your custom settings go here
+	  });
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.0.5/dist/lazyload.min.js"></script>
+	<script src="js/jquery-3.4.1.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/jquery.animateNumber.min.js"></script>
+	<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+	<script src="js/jquery.waypoints.min.js"></script>
+	<script src="js/jquery.fancybox.min.js"></script>
+
+	<script src="js/aos.js"></script>
+	<!-- <script src="js/wave-animate.js"></script> -->
+	<script src="js/circle-progress.js"></script>
+	<script src="js/imagesloaded.pkgd.js"></script>
+	<script src="js/isotope.pkgd.min.js"></script>
+	<script src="js/jquery.easing.1.3.js"></script>
+	
+	<script src="js/ScrollMagic.min.js"></script>
+	<script src="js/scrollmagic.animation.gsap.min.js"></script>
+	<script src="js/custom.js"></script>
+	<script>
+		
+			Fancybox.bind("[data-fancybox]", {
+				// Your custom options
+			});
+
+		</script>
+<script>
+const filterTexts = document.querySelectorAll('.filter-text'); 
+const portfolioItems = document.querySelectorAll('.item');
+
+filterTexts.forEach(filterText => {
+  filterText.addEventListener('click', (e) => {
+    console.log("Filter clicked:", e.target.dataset.filter); // Check that it works
+
+    const filter = e.target.dataset.filter; 
+
+    portfolioItems.forEach(item => {
+      if (filter === 'all' || item.classList.contains(filter)) {
+        item.style.display = 'block'; 
+      } else {
+        item.style.display = 'none'; 
+      }
+    });
+
+    // Add active class to selected button 
+    filterTexts.forEach(text => text.classList.remove('active'));
+    filterText.classList.add('active');
+  });
+});	
+</script>
+<script>
+// Intersection Observer to make the content visible when in the viewport (no changes needed)
+const observer = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target); // Stop observing once it becomes visible
+    }
+  });
+}, {
+  root: null,
+  threshold: 0.1  // Trigger when 10% of the element is visible
+});
+
+// Initial observation of portfolio items
+const items = document.querySelectorAll('.item');
+items.forEach(item => {
+  observer.observe(item);
+});
+
+// Handling the "Load More" functionality with animation
+const loadMoreBtn = document.getElementById('load-more');
+const postsContainer = document.getElementById('posts'); 
+let currentImageIndex = 0;
+const imagesPerLoad = 9; // Number of items to load per click
+
+const moreImages = [ 
+   { lowRes: "images/lowres/13.webp", highRes: "images/hires/13.jpg", classes: "item web photography creative" },
+   { lowRes: "images/lowres/14.webp", highRes: "images/hires/14.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/15.webp", highRes: "images/hires/15.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/16.webp", highRes: "images/hires/16.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/17.webp", highRes: "images/hires/17.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/18.webp", highRes: "images/hires/18.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/19.webp", highRes: "images/hires/19.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/20.webp", highRes: "images/hires/20.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/21.webp", highRes: "images/hires/21.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/22.webp", highRes: "images/hires/22.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/23.webp", highRes: "images/hires/23.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/24.webp", highRes: "images/hires/24.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/25.webp", highRes: "images/hires/25.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/26.webp", highRes: "images/hires/26.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/27.webp", highRes: "images/hires/27.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/28.webp", highRes: "images/hires/28.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/29.webp", highRes: "images/hires/29.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/30.webp", highRes: "images/hires/30.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/31.webp", highRes: "images/hires/31.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/32.webp", highRes: "images/hires/32.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/33.webp", highRes: "images/hires/33.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/34.webp", highRes: "images/hires/34.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/35.webp", highRes: "images/hires/35.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/36.webp", highRes: "images/hires/36.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/37.webp", highRes: "images/hires/37.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/38.webp", highRes: "images/hires/38.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/39.webp", highRes: "images/hires/39.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/40.webp", highRes: "images/hires/40.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/41.webp", highRes: "images/hires/41.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/42.webp", highRes: "images/hires/42.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/43.webp", highRes: "images/hires/43.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/44.webp", highRes: "images/hires/44.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/45.webp", highRes: "images/hires/45.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/46.webp", highRes: "images/hires/46.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/47.webp", highRes: "images/hires/47.jpg", classes: "item web branding natural" },
+   { lowRes: "images/lowres/48.webp", highRes: "images/hires/48.jpg", classes: "item web branding natural" },
+];
+
+// Handle the "Load More" button click event
+loadMoreBtn.addEventListener('click', () => {
+    const end = Math.min(currentImageIndex + imagesPerLoad, moreImages.length);
+    const imagesToLoad = moreImages.slice(currentImageIndex, end);
+
+    // Create a wrapper for new images to animate as a group
+    const newWrapper = document.createElement('div');
+    newWrapper.classList.add('item-wrapper'); 
+
+    // Append new images inside the wrapper
+    imagesToLoad.forEach(image => {
+       const newImageItem = `
+          <div class="${image.classes} col-sm-6 col-md-6 col-lg-4 isotope-mb-2">
+              <a href="${image.highRes}" data-fancybox="project-gallery">
+                  <img src="${image.lowRes}" class="lazyload img-fluid" alt="Images" />
+                  <div class="overlay">
+                      <p class="overlay-text">View</p>
+                  </div>
+              </a>
+          </div>
+       `;
+       newWrapper.innerHTML += newImageItem;
+    });
+
+    // Add the new images to the posts container
+    postsContainer.appendChild(newWrapper);
+
+    // Trigger the animation by adding the 'visible' class
+    setTimeout(() => {
+        newWrapper.classList.add('visible');
+    }, 50);
+
+    // Re-observe newly added images
+    const newItems = newWrapper.querySelectorAll('.item');
+    newItems.forEach(item => {
+      observer.observe(item);
+    });
+
+    currentImageIndex = end;
+
+    // Hide the "Load More" button if there are no more images
+    if (currentImageIndex >= moreImages.length) {
+        loadMoreBtn.style.display = 'none';
+    }
+});
+</script>
+
+
+
+<script>
+// Flip the year from 18 to 24
+window.onload = () => {
+    const flip = document.querySelector('.flip');
+    const flipNext = document.querySelector('.flip-next');
+    const currentYear = document.querySelector('.current-year');
+
+    setTimeout(() => {
+        flip.classList.add('animate');
+        flipNext.classList.add('animate');
+    }, 1000); // Delay for 1 second to trigger the animation
+
+    // Update copyright text after animation
+    setTimeout(() => {
+        currentYear.textContent = '2024';
+    }, 1500); // Update after animation ends
+
+    // Simulate loading delay (adjust/remove for production)
+    setTimeout(() => {
+        const preloader = document.getElementById("preloader");
+        if (preloader) {
+            // Fade out the preloader after the flip animation and delay of 2 seconds
+            setTimeout(() => {
+                preloader.style.opacity = "0";
+                preloader.style.transition = "opacity 0.5s ease";
+                
+                // Remove the preloader after fade-out, with an additional 2-second delay
+                setTimeout(() => preloader.remove(), 2000); // Keep preloader for 2 seconds after animation
+            }, 2000); // Delay for 2 seconds after everything is loaded and flip animation
+        }
+    }, 1000); // 3500ms to delay the start of fade-out after flip animation
+};
+</script>
+
+</body>
+
+
+</html>

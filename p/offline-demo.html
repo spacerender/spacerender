@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Portfolio Demo - Vijay Sharma</title>
+    <style>
+        body {
+            font-family: 'EB Garamond', serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #ffffff;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .image-placeholder {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border: 2px dashed #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+        .large-image {
+            aspect-ratio: 3/4;
+        }
+        .small-image {
+            aspect-ratio: 3/5;
+        }
+        .portfolio-items {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .portfolio-item {
+            aspect-ratio: 4/3;
+        }
+        .info-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+            margin: 20px 0;
+        }
+        .solution-box {
+            background: #d1ecf1;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #0c5460;
+            margin: 20px 0;
+        }
+        h1, h2, h3 {
+            font-family: 'EB Garamond', serif;
+            font-weight: 500;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        h2 {
+            font-size: 1.8rem;
+            color: #555;
+        }
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.1rem;
+            padding: 10px 0;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            border-bottom-color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Vijay Sharma</h1>
+            <div class="navigation">
+                <a href="#" class="nav-link active">Portfolio</a>
+                <a href="#" class="nav-link">Resumé</a>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>🎨 Offline Portfolio Demo</h3>
+            <p>This is how your portfolio website looks with placeholder images. The actual website uses professional portfolio images hosted on CloudFront CDN.</p>
+        </div>
+
+        <div class="header">
+            <h2>My portfolio</h2>
+        </div>
+
+        <div class="portfolio-grid">
+            <div class="image-placeholder large-image">
+                <div>
+                    <strong>🖼️ Portfolio Image 1</strong><br>
+                    <small>Original: Professional photography/artwork<br>
+                    Source: CloudFront CDN<br>
+                    Aspect Ratio: 3:4</small>
+                </div>
+            </div>
+            <div class="image-placeholder small-image">
+                <div>
+                    <strong>🖼️ Portfolio Image 2</strong><br>
+                    <small>Original: Professional photography/artwork<br>
+                    Source: CloudFront CDN<br>
+                    Aspect Ratio: 3:5</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="portfolio-items">
+            <div class="image-placeholder portfolio-item">
+                <div>
+                    <strong>🖼️ Project Image 1</strong><br>
+                    <small>Portfolio project showcase</small>
+                </div>
+            </div>
+            <div class="image-placeholder portfolio-item">
+                <div>
+                    <strong>🖼️ Project Image 2</strong><br>
+                    <small>Portfolio project showcase</small>
+                </div>
+            </div>
+            <div class="image-placeholder portfolio-item">
+                <div>
+                    <strong>🖼️ Project Image 3</strong><br>
+                    <small>Portfolio project showcase</small>
+                </div>
+            </div>
+            <div class="image-placeholder portfolio-item">
+                <div>
+                    <strong>🖼️ Project Image 4</strong><br>
+                    <small>Portfolio project showcase</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="solution-box">
+            <h3>🌐 How to Enable Images</h3>
+            <p><strong>Method 1 (Easiest):</strong> Connect your computer to the internet. The images will load automatically from the CDN.</p>
+            <p><strong>Method 2 (Advanced):</strong> Download the images from their CDN URLs and replace the links in the HTML file with local paths.</p>
+            <p><strong>Method 3 (Alternative):</strong> Replace with your own portfolio images by editing the HTML file.</p>
+        </div>
+
+        <div class="info-box">
+            <h3>✅ What's Working</h3>
+            <ul>
+                <li>✅ Website layout and structure</li>
+                <li>✅ Custom fonts (EB Garamond, Zodiak)</li>
+                <li>✅ CSS styling and animations</li>
+                <li>✅ JavaScript functionality</li>
+                <li>✅ Responsive design</li>
+                <li>✅ Navigation and interactions</li>
+                <li>🌐 Images (requires internet or local replacement)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

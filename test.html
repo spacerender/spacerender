@@ -3,33 +3,46 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Razorpay + Google Login Test</title>
+  <title>Download after Payment (Razorpay Payment Page)</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
-  <div class="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-lg text-center">
-    <h1 class="text-2xl mb-4">🌸 One-file Demo</h1>
+  <div class="w-full max-w-xl p-6 bg-gray-800 rounded-lg shadow-lg">
+    <h1 class="text-2xl mb-4 text-center">🌸 Access Downloads After Payment</h1>
 
-    <div id="user-info" class="mb-4">Not logged in.</div>
-    <div class="space-x-2">
+    <div id="user-info" class="mb-4 text-center">Not logged in.</div>
+
+    <div class="flex justify-center gap-2 mb-4">
       <button id="loginBtn" class="px-4 py-2 bg-blue-600 rounded">Login with Google</button>
       <button id="logoutBtn" class="px-4 py-2 bg-red-600 rounded hidden">Logout</button>
     </div>
 
-    <div id="product" class="hidden mt-6">
+    <div id="status" class="mb-4 text-center text-sm"></div>
+
+    <div id="product-area" class="hidden text-center">
       <h2 class="text-lg mb-2">Special Item — ₹1</h2>
-      <button id="buyBtn" class="px-4 py-2 bg-green-600 rounded">Buy Now</button>
+      <a id="downloadLink" href="#" download class="inline-block px-4 py-2 bg-green-600 rounded">Download Product</a>
     </div>
 
-    <div id="message" class="mt-4 text-sm"></div>
+    <div id="not-paid" class="hidden text-center text-red-300">
+      Payment not verified. Please complete payment first.
+    </div>
+
+    <div id="manual-check" class="mt-4 text-center text-sm">
+      If you already paid but were not redirected, paste the Razorpay Payment ID here:
+      <div class="mt-2">
+        <input id="manualPaymentId" class="px-2 py-1 text-black" placeholder="e.g. pay_ABC123..." />
+        <button id="manualCheckBtn" class="px-3 py-1 bg-indigo-600 rounded text-white">Verify</button>
+      </div>
+    </div>
   </div>
 
+  <!-- Firebase (Google Sign-In) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-    // 🔑 Replace with your Firebase config
+    // Replace with your Firebase config (same as you already use)
     const firebaseConfig = {
       apiKey: "AIzaSyC0QGaDKrKzb7SGcQ3K3Sw2oI8-qIIRkHs",
       authDomain: "archviz-models.firebaseapp.com",
@@ -47,75 +60,111 @@
     const loginBtn = document.getElementById("loginBtn");
     const logoutBtn = document.getElementById("logoutBtn");
     const userInfo = document.getElementById("user-info");
-    const productDiv = document.getElementById("product");
-    const buyBtn = document.getElementById("buyBtn");
-    const messageDiv = document.getElementById("message");
+    const statusDiv = document.getElementById("status");
+    const productArea = document.getElementById("product-area");
+    const notPaid = document.getElementById("not-paid");
+    const downloadLink = document.getElementById("downloadLink");
+    const manualPaymentId = document.getElementById("manualPaymentId");
+    const manualCheckBtn = document.getElementById("manualCheckBtn");
 
-    function setMessage(txt, type="info") {
-      messageDiv.textContent = txt;
-      messageDiv.className = "mt-4 text-sm " + (type==="error"?"text-red-400":"text-green-300");
+    function setStatus(text, isError = false) {
+      statusDiv.textContent = text;
+      statusDiv.className = isError ? "mb-4 text-center text-red-300" : "mb-4 text-center text-green-300";
     }
 
-    // Google login
-    loginBtn.addEventListener("click", ()=>signInWithPopup(auth, provider).catch(e=>setMessage("Login error: "+e.message,"error")));
-    logoutBtn.addEventListener("click", ()=>signOut(auth).catch(e=>setMessage("Logout error: "+e.message,"error")));
+    loginBtn.addEventListener("click", () => signInWithPopup(auth, provider).catch(e => setStatus("Login failed: " + e.message, true)));
+    logoutBtn.addEventListener("click", () => signOut(auth).catch(e => setStatus("Logout failed: " + e.message, true)));
 
-    onAuthStateChanged(auth,(user)=>{
-      if(user){
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
         userInfo.innerHTML = `✅ Logged in as <b>${user.displayName}</b> (${user.email})`;
         loginBtn.classList.add("hidden");
         logoutBtn.classList.remove("hidden");
-        productDiv.classList.remove("hidden");
       } else {
         userInfo.innerHTML = "❌ Not logged in.";
         loginBtn.classList.remove("hidden");
         logoutBtn.classList.add("hidden");
-        productDiv.classList.add("hidden");
       }
     });
 
-    // ⚠️ TEST KEYS (exposed!)
-    const RAZORPAY_KEY_ID = "rzp_live_RJn6bJb2qAHcuW"; 
-    const RAZORPAY_KEY_SECRET = "AlFTUDhCuU71YO2I3Qqy7M2E";
+    // Helper: parse query params
+    function parseQuery() {
+      const obj = {};
+      const q = location.search.replace(/^\?/, '');
+      if (!q) return obj;
+      q.split("&").forEach(pair => {
+        const [k, v] = pair.split("=");
+        obj[decodeURIComponent(k)] = decodeURIComponent(v || "");
+      });
+      return obj;
+    }
 
-    buyBtn.addEventListener("click", async ()=>{
-      setMessage("Creating order...");
+    // Call server to verify payment
+    async function verifyPayment(paymentId) {
+      setStatus("Verifying payment...");
       try {
-        // Call Razorpay Orders API directly with Basic Auth
-        const authHeader = "Basic " + btoa(RAZORPAY_KEY_ID + ":" + RAZORPAY_KEY_SECRET);
-        const resp = await fetch("https://api.razorpay.com/v1/orders",{
-          method:"POST",
-          headers:{
-            "Content-Type":"application/json",
-            "Authorization":authHeader
-          },
-          body: JSON.stringify({amount:100, currency:"INR", payment_capture:1})
+        const resp = await fetch("/api/verify-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ payment_id: paymentId })
         });
-        if(!resp.ok) throw new Error("Order API error: "+resp.status);
-        const order = await resp.json();
 
-        const options = {
-          key: RAZORPAY_KEY_ID,
-          amount: order.amount,
-          currency: order.currency,
-          name: "Special Item",
-          description: "Purchase of special item",
-          order_id: order.id,
-          handler: (res)=>{
-            setMessage("Payment success! ID: "+res.razorpay_payment_id);
-          },
-          prefill: {
-            email: auth.currentUser?.email || "",
-            name: auth.currentUser?.displayName || ""
-          },
-          theme:{color:"#3399cc"}
-        };
-        const rzp = new Razorpay(options);
-        rzp.open();
-      } catch(err) {
-        console.error(err);
-        setMessage("Error: "+err.message,"error");
+        const json = await resp.json();
+        if (!resp.ok) {
+          setStatus("Server error verifying payment: " + (json.error || resp.status), true);
+          return { ok: false };
+        }
+
+        if (json.ok && json.status === "captured") {
+          setStatus("Payment verified ✅ (captured). You can download the product.");
+          showProduct();
+          return { ok: true, payment: json.payment };
+        } else {
+          setStatus("Payment not completed. Status: " + json.status, true);
+          showNotPaid();
+          return { ok: false, payment: json.payment };
+        }
+      } catch (err) {
+        console.error("verifyPayment err:", err);
+        setStatus("Network/verification error: " + err.message, true);
+        return { ok: false };
       }
+    }
+
+    function showProduct() {
+      notPaid.classList.add("hidden");
+      productArea.classList.remove("hidden");
+      // set your real download URL here (could be protected file URL)
+      downloadLink.href = "/protected/my-product.zip"; // change to real link
+    }
+
+    function showNotPaid() {
+      productArea.classList.add("hidden");
+      notPaid.classList.remove("hidden");
+    }
+
+    // When user returns from the Razorpay Payment Page, Razorpay appends params like:
+    // ?razorpay_payment_id=pay_XXX&razorpay_payment_link_id=plink_YYY&razorpay_payment_link_reference=...
+    // We'll look for razorpay_payment_id and verify it server-side.
+    (async function checkRedirect() {
+      const q = parseQuery();
+      const paymentId = q.razorpay_payment_id || q.razorpay_payment_id; // be flexible
+      if (paymentId) {
+        // Remove query params from URL for cleanliness (optional)
+        history.replaceState(null, "", location.pathname);
+
+        // verify with server
+        await verifyPayment(paymentId);
+      } else {
+        setStatus("No payment id in URL. If you paid, paste your Payment ID below to verify manually.");
+      }
+    })();
+
+    // Manual check button (if user has payment id)
+    manualCheckBtn.addEventListener("click", async () => {
+      const val = manualPaymentId.value.trim();
+      if (!val) return setStatus("Enter a payment id to verify", true);
+      await verifyPayment(val);
     });
   </script>
 </body>

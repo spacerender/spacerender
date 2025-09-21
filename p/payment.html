@@ -49,12 +49,20 @@
     
     // Payment function (TEMPORARY LOCALHOST VERSION)
     window.initiatePayment = async function() {
+      // Clear any previous status messages
+      document.getElementById("payment-status").innerHTML = '';
+      
+      console.log('Starting payment process...');
+      console.log('Current user:', currentUser);
+      
       if (!currentUser) {
         alert("Please login first!");
         return;
       }
 
       try {
+        console.log('Checking API availability...');
+        
         // Check if API is available, fallback to local storage if not
         let useAPI = false;
         try {
@@ -64,6 +72,7 @@
             body: JSON.stringify({ amount: 999, user_email: currentUser.email })
           });
           useAPI = testResponse.ok;
+          console.log('API available:', useAPI);
         } catch (e) {
           console.log('API not available, using fallback mode');
           useAPI = false;
@@ -71,6 +80,7 @@
 
         let orderData;
         if (useAPI) {
+          console.log('Using server API for order creation...');
           // Use server API (when available)
           const API_BASE = 'https://spacerender.vercel.app/p';
           const orderResponse = await fetch(`${API_BASE}/api/create-order`, {
@@ -79,7 +89,9 @@
             body: JSON.stringify({ amount: 999, user_email: currentUser.email })
           });
           orderData = await orderResponse.json();
+          console.log('Server order data:', orderData);
         } else {
+          console.log('Using local fallback for order creation...');
           // Fallback: Generate order locally
           orderData = {
             success: true,
@@ -88,12 +100,14 @@
             currency: 'INR',
             key_id: 'rzp_live_RJn6bJb2qAHcuW'
           };
+          console.log('Local order data:', orderData);
         }
         
         if (!orderData.success) {
-          throw new Error('Failed to create order');
+          throw new Error('Failed to create order: ' + (orderData.message || 'Unknown error'));
         }
         
+        console.log('Creating Razorpay options...');
         const options = {
           "key": orderData.key_id,
           "amount": orderData.amount,
@@ -103,6 +117,7 @@
           "image": "https://via.placeholder.com/150x150?text=SR",
           "order_id": orderData.order_id,
           "handler": function (response) {
+            console.log('Payment handler called with:', response);
             handlePaymentSuccess(response);
           },
           "prefill": {
@@ -119,13 +134,21 @@
           },
           "modal": {
             "ondismiss": function() {
-              console.log("Payment cancelled");
+              console.log("Payment cancelled by user");
             }
           }
         };
 
+        console.log('Razorpay options:', options);
+        
+        if (typeof Razorpay === 'undefined') {
+          throw new Error('Razorpay SDK not loaded. Please check your internet connection.');
+        }
+        
+        console.log('Opening Razorpay checkout...');
         const rzp = new Razorpay(options);
         rzp.on('payment.failed', function (response) {
+          console.log('Payment failed event triggered:', response);
           handlePaymentFailure(response);
         });
         
@@ -133,7 +156,19 @@
         
       } catch (error) {
         console.error('Error initiating payment:', error);
-        alert('Failed to initiate payment. Please try again.');
+        
+        // Show detailed error message
+        document.getElementById("payment-status").innerHTML = `
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <strong>Failed to initiate payment!</strong><br>
+            Error: ${error.message}<br>
+            <details class="mt-2">
+              <summary class="cursor-pointer text-sm">Technical Details</summary>
+              <pre class="text-xs mt-1 bg-red-50 p-2 rounded">${error.stack || error.toString()}</pre>
+            </details>
+            Please try again or contact support.
+          </div>
+        `;
       }
     };
 
@@ -234,11 +269,21 @@
     function handlePaymentFailure(response) {
       console.log("Payment Failed:", response);
       
+      // More detailed error reporting
+      let errorMessage = 'Unknown error occurred';
+      if (response && response.error) {
+        errorMessage = response.error.description || response.error.reason || response.error.code || 'Payment gateway error';
+      }
+      
       document.getElementById("payment-status").innerHTML = `
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
           <strong>Payment Failed!</strong><br>
-          Error: ${response.error.description}<br>
-          Please try again.
+          Error: ${errorMessage}<br>
+          <details class="mt-2">
+            <summary class="cursor-pointer text-sm">Technical Details</summary>
+            <pre class="text-xs mt-1 bg-red-50 p-2 rounded">${JSON.stringify(response, null, 2)}</pre>
+          </details>
+          Please try again or contact support.
         </div>
       `;
     }

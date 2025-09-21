@@ -1,17 +1,35 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hello World with Google Login & Razorpay</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Razorpay + Google Login Test</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Firebase SDKs -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-lg text-center">
+    <h1 class="text-2xl mb-4">🌸 One-file Demo</h1>
+
+    <div id="user-info" class="mb-4">Not logged in.</div>
+    <div class="space-x-2">
+      <button id="loginBtn" class="px-4 py-2 bg-blue-600 rounded">Login with Google</button>
+      <button id="logoutBtn" class="px-4 py-2 bg-red-600 rounded hidden">Logout</button>
+    </div>
+
+    <div id="product" class="hidden mt-6">
+      <h2 class="text-lg mb-2">Special Item — ₹1</h2>
+      <button id="buyBtn" class="px-4 py-2 bg-green-600 rounded">Buy Now</button>
+    </div>
+
+    <div id="message" class="mt-4 text-sm"></div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } 
-      from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-    // 🔥 Firebase Config
+    // 🔑 Replace with your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyC0QGaDKrKzb7SGcQ3K3Sw2oI8-qIIRkHs",
       authDomain: "archviz-models.firebaseapp.com",
@@ -21,30 +39,29 @@
       appId: "1:222151849439:web:3db08b239edc40e889806a",
       measurementId: "G-LL0PFNZFGW"
     };
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
+    // DOM
     const loginBtn = document.getElementById("loginBtn");
     const logoutBtn = document.getElementById("logoutBtn");
     const userInfo = document.getElementById("user-info");
     const productDiv = document.getElementById("product");
     const buyBtn = document.getElementById("buyBtn");
+    const messageDiv = document.getElementById("message");
 
-    // Google Login
-    loginBtn.addEventListener("click", () => {
-      signInWithPopup(auth, provider).catch(err => alert(err.message));
-    });
+    function setMessage(txt, type="info") {
+      messageDiv.textContent = txt;
+      messageDiv.className = "mt-4 text-sm " + (type==="error"?"text-red-400":"text-green-300");
+    }
 
-    // Logout
-    logoutBtn.addEventListener("click", () => {
-      signOut(auth);
-    });
+    // Google login
+    loginBtn.addEventListener("click", ()=>signInWithPopup(auth, provider).catch(e=>setMessage("Login error: "+e.message,"error")));
+    logoutBtn.addEventListener("click", ()=>signOut(auth).catch(e=>setMessage("Logout error: "+e.message,"error")));
 
-    // Auth State
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
+    onAuthStateChanged(auth,(user)=>{
+      if(user){
         userInfo.innerHTML = `✅ Logged in as <b>${user.displayName}</b> (${user.email})`;
         loginBtn.classList.add("hidden");
         logoutBtn.classList.remove("hidden");
@@ -57,51 +74,49 @@
       }
     });
 
-    // Razorpay Checkout
-    buyBtn.addEventListener("click", async () => {
+    // ⚠️ TEST KEYS (exposed!)
+    const RAZORPAY_KEY_ID = "rzp_live_RJn6bJb2qAHcuW"; 
+    const RAZORPAY_KEY_SECRET = "AlFTUDhCuU71YO2I3Qqy7M2E";
+
+    buyBtn.addEventListener("click", async ()=>{
+      setMessage("Creating order...");
       try {
-        const res = await fetch("/api/create-order", { method: "POST" });
-        const order = await res.json();
+        // Call Razorpay Orders API directly with Basic Auth
+        const authHeader = "Basic " + btoa(RAZORPAY_KEY_ID + ":" + RAZORPAY_KEY_SECRET);
+        const resp = await fetch("https://api.razorpay.com/v1/orders",{
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json",
+            "Authorization":authHeader
+          },
+          body: JSON.stringify({amount:100, currency:"INR", payment_capture:1})
+        });
+        if(!resp.ok) throw new Error("Order API error: "+resp.status);
+        const order = await resp.json();
 
         const options = {
-          key: window.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_xxx", // ✅ exposed in Vercel env
+          key: RAZORPAY_KEY_ID,
           amount: order.amount,
           currency: order.currency,
           name: "Special Item",
           description: "Purchase of special item",
           order_id: order.id,
-          handler: function (response) {
-            alert("🌸 Payment Successful! Payment ID: " + response.razorpay_payment_id);
+          handler: (res)=>{
+            setMessage("Payment success! ID: "+res.razorpay_payment_id);
           },
           prefill: {
             email: auth.currentUser?.email || "",
             name: auth.currentUser?.displayName || ""
           },
-          theme: { color: "#3399cc" }
+          theme:{color:"#3399cc"}
         };
-
         const rzp = new Razorpay(options);
         rzp.open();
-      } catch (err) {
-        alert("Error creating order: " + err.message);
+      } catch(err) {
+        console.error(err);
+        setMessage("Error: "+err.message,"error");
       }
     });
   </script>
-</head>
-<body class="bg-gray-900 text-white flex items-center justify-center h-screen">
-  <div class="text-center">
-    <h1 class="text-3xl mb-6">🌸 Hello World 🌸</h1>
-    <div id="user-info" class="mb-4">Not logged in.</div>
-    <button id="loginBtn" class="px-4 py-2 bg-blue-600 rounded">Login with Google</button>
-    <button id="logoutBtn" class="px-4 py-2 bg-red-600 rounded hidden">Logout</button>
-
-    <!-- Product -->
-    <div id="product" class="hidden mt-6">
-      <h2 class="text-xl mb-2">Special Item - ₹1</h2>
-      <button id="buyBtn" class="px-4 py-2 bg-green-600 rounded">Buy Now</button>
-    </div>
-  </div>
-
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </body>
 </html>

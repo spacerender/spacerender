@@ -43,14 +43,23 @@
       signOut(auth);
     });
 
-    // Check payment status
+    // Check payment status for specific user
     function checkPaymentStatus() {
-      const paymentData = localStorage.getItem('payment_data');
+      if (!currentUser) {
+        return { hasPaid: false };
+      }
+      
+      // Check payment data for this specific user email (SECURITY FIX)
+      const userPaymentKey = `payment_${currentUser.email}`;
+      const paymentData = localStorage.getItem(userPaymentKey);
+      
       if (paymentData) {
         try {
           const payment = JSON.parse(paymentData);
-          // In production, verify this with your backend
-          if (payment.status === 'completed' && payment.payment_id) {
+          // Verify payment belongs to current user
+          if (payment.status === 'completed' && 
+              payment.user_email === currentUser.email && 
+              payment.payment_id) {
             return {
               hasPaid: true,
               paymentInfo: payment
@@ -97,9 +106,17 @@
       }
     });
 
-    // Clear payment data function
+    // Clear payment data function (only for current user)
     window.clearPayment = function() {
-      localStorage.removeItem('payment_data');
+      if (currentUser) {
+        const userPaymentKey = `payment_${currentUser.email}`;
+        localStorage.removeItem(userPaymentKey);
+        
+        // Remove from paid users list
+        const paidUsers = JSON.parse(localStorage.getItem('paid_users') || '[]');
+        const updatedPaidUsers = paidUsers.filter(email => email !== currentUser.email);
+        localStorage.setItem('paid_users', JSON.stringify(updatedPaidUsers));
+      }
       location.reload();
     };
   </script>

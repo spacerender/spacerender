@@ -55,42 +55,72 @@
 
   <script>
     function checkPayments() {
-      const paymentData = localStorage.getItem('payment_data');
       const statusDiv = document.getElementById('payment-status');
+      let html = '';
       
-      if (paymentData) {
-        try {
-          const payment = JSON.parse(paymentData);
-          statusDiv.innerHTML = `
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-              <strong>Payment Found:</strong><br>
-              Payment ID: ${payment.payment_id}<br>
-              User: ${payment.user_email}<br>
-              Status: ${payment.status}<br>
-              Timestamp: ${new Date(payment.timestamp).toLocaleString()}
-            </div>
-          `;
-        } catch (e) {
-          statusDiv.innerHTML = `
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-              <strong>Error:</strong> Invalid payment data found
-            </div>
-          `;
-        }
+      // Check for paid users list
+      const paidUsers = JSON.parse(localStorage.getItem('paid_users') || '[]');
+      
+      if (paidUsers.length > 0) {
+        html += `<h3 class="text-lg font-semibold mb-2">👥 Paid Users (${paidUsers.length})</h3>`;
+        
+        paidUsers.forEach(email => {
+          const userPaymentKey = `payment_${email}`;
+          const paymentData = localStorage.getItem(userPaymentKey);
+          
+          if (paymentData) {
+            try {
+              const payment = JSON.parse(paymentData);
+              html += `
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-2">
+                  <strong>✅ ${email}</strong><br>
+                  Payment ID: ${payment.payment_id}<br>
+                  Status: ${payment.status}<br>
+                  Date: ${new Date(payment.timestamp).toLocaleString()}
+                  <button onclick="removeUserPayment('${email}')" class="ml-2 px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700">
+                    Remove
+                  </button>
+                </div>
+              `;
+            } catch (e) {
+              html += `
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-2">
+                  <strong>❌ ${email}</strong><br>
+                  Error: Invalid payment data
+                </div>
+              `;
+            }
+          }
+        });
       } else {
-        statusDiv.innerHTML = `
+        html = `
           <div class="bg-gray-100 border border-gray-400 text-gray-700 px-4 py-3 rounded">
-            No payment data found
+            No paid users found
           </div>
         `;
       }
+      
+      statusDiv.innerHTML = html;
     }
     
     function clearAllPayments() {
+      const paidUsers = JSON.parse(localStorage.getItem('paid_users') || '[]');
+      
+      // Remove all user payment data
+      paidUsers.forEach(email => {
+        const userPaymentKey = `payment_${email}`;
+        localStorage.removeItem(userPaymentKey);
+      });
+      
+      // Clear paid users list
+      localStorage.removeItem('paid_users');
+      
+      // Also remove old payment_data if exists
       localStorage.removeItem('payment_data');
+      
       document.getElementById('payment-status').innerHTML = `
         <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded">
-          All payment data cleared
+          All payment data cleared for all users
         </div>
       `;
     }
@@ -115,15 +145,44 @@
         status: 'completed'
       };
       
-      localStorage.setItem('payment_data', JSON.stringify(simulatedPayment));
+      // Store payment with user email as key
+      const userPaymentKey = `payment_${email}`;
+      localStorage.setItem(userPaymentKey, JSON.stringify(simulatedPayment));
+      
+      // Add to paid users list
+      const paidUsers = JSON.parse(localStorage.getItem('paid_users') || '[]');
+      if (!paidUsers.includes(email)) {
+        paidUsers.push(email);
+        localStorage.setItem('paid_users', JSON.stringify(paidUsers));
+      }
       
       document.getElementById('payment-status').innerHTML = `
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
           <strong>Payment Simulated Successfully!</strong><br>
+          User: ${email}<br>
           Payment ID: ${simulatedPayment.payment_id}<br>
-          You can now go to test.html to see the premium access
+          You can now login with this email to see premium access
         </div>
       `;
+      
+      // Refresh the payments list
+      setTimeout(checkPayments, 1000);
+    }
+    
+    function removeUserPayment(email) {
+      if (confirm(`Remove payment access for ${email}?`)) {
+        // Remove user payment data
+        const userPaymentKey = `payment_${email}`;
+        localStorage.removeItem(userPaymentKey);
+        
+        // Remove from paid users list
+        const paidUsers = JSON.parse(localStorage.getItem('paid_users') || '[]');
+        const updatedPaidUsers = paidUsers.filter(userEmail => userEmail !== email);
+        localStorage.setItem('paid_users', JSON.stringify(updatedPaidUsers));
+        
+        // Refresh the display
+        checkPayments();
+      }
     }
     
     // Check payments on page load

@@ -41,14 +41,18 @@
         return;
       }
 
-      if (!paymentData) {
+      // Check payment for current user specifically (SECURITY FIX)
+      const userPaymentKey = `payment_${currentUser.email}`;
+      const userPaymentData = localStorage.getItem(userPaymentKey);
+      
+      if (!userPaymentData) {
         showAccessDenied("Payment required to access premium models.");
         return;
       }
 
       try {
-        const payment = JSON.parse(paymentData);
-        if (payment.status === 'completed') {
+        const payment = JSON.parse(userPaymentData);
+        if (payment.status === 'completed' && payment.user_email === currentUser.email) {
           showModelsLibrary();
         } else {
           showAccessDenied("Payment verification failed.");
@@ -183,8 +187,8 @@
         };
       });
       
-      // Combine GitHub auto-detected models with manual models
-      const allModels = [...githubModels, ...MODELS_CONFIG.models];
+      // Combine GitHub auto-detected models with manual models (FIXED)
+      const allModels = [...MODELS_CONFIG.models, ...githubModels];
       
       // Remove duplicates based on download URL
       const uniqueModels = allModels.filter((model, index, self) => 

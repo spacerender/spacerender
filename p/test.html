@@ -61,7 +61,8 @@
       }
       
       try {
-        const response = await fetch(`/api/user/${encodeURIComponent(currentUser.email)}/payment-status`);
+        const API_BASE = 'https://spacerender.vercel.app';
+        const response = await fetch(`${API_BASE}/api/user/${encodeURIComponent(currentUser.email)}/payment-status`);
         const data = await response.json();
         
         return {
@@ -113,7 +114,8 @@
     window.clearPayment = async function() {
       if (currentUser && confirm('Remove your premium access? This action cannot be undone.')) {
         try {
-          const response = await fetch(`/api/admin/user/${encodeURIComponent(currentUser.email)}/payment`, {
+          const API_BASE = 'https://spacerender.vercel.app';
+          const response = await fetch(`${API_BASE}/api/admin/user/${encodeURIComponent(currentUser.email)}/payment`, {
             method: 'DELETE'
           });
           

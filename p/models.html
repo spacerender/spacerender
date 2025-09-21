@@ -41,7 +41,8 @@
 
       try {
         // Check payment status on server
-        const response = await fetch(`/api/user/${encodeURIComponent(currentUser.email)}/payment-status`);
+        const API_BASE = 'https://spacerender.vercel.app';
+        const response = await fetch(`${API_BASE}/api/user/${encodeURIComponent(currentUser.email)}/payment-status`);
         const data = await response.json();
         
         if (data.hasPaid) {

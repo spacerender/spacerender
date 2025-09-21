@@ -55,8 +55,9 @@
       }
 
       try {
-        // Create order on server
-        const orderResponse = await fetch('/api/create-order', {
+        // Create order on server - using absolute URL for Vercel deployment
+        const API_BASE = 'https://spacerender.vercel.app';
+        const orderResponse = await fetch(`${API_BASE}/api/create-order`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -129,7 +130,7 @@
       
       try {
         // Verify payment on server
-        const verifyResponse = await fetch('/api/verify-payment', {
+        const verifyResponse = await fetch(`${API_BASE}/api/verify-payment`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

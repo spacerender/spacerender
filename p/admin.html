@@ -58,7 +58,8 @@
       const statusDiv = document.getElementById('payment-status');
       
       try {
-        const response = await fetch('/api/admin/paid-users');
+        const API_BASE = 'https://spacerender.vercel.app/p';
+        const response = await fetch(`${API_BASE}/api/admin/paid-users`);
         const data = await response.json();
         
         if (data.users && data.users.length > 0) {
@@ -103,13 +104,15 @@
       
       try {
         // Get all users first
-        const response = await fetch('/api/admin/paid-users');
+        const API_BASE = 'https://spacerender.vercel.app/p';
+        const response = await fetch(`${API_BASE}/api/admin/paid-users`);
         const data = await response.json();
         
         if (data.users && data.users.length > 0) {
           // Remove each user's payment
+          const API_BASE = 'https://spacerender.vercel.app/p';
           for (const user of data.users) {
-            await fetch(`/api/admin/user/${encodeURIComponent(user.email)}/payment`, {
+            await fetch(`${API_BASE}/api/admin/user/${encodeURIComponent(user.email)}/payment`, {
               method: 'DELETE'
             });
           }
@@ -141,7 +144,8 @@
       
       try {
         // Simulate payment verification on server
-        const response = await fetch('/api/verify-payment', {
+        const API_BASE = 'https://spacerender.vercel.app/p';
+        const response = await fetch(`${API_BASE}/api/verify-payment`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -183,7 +187,8 @@
     async function removeUserPayment(email) {
       if (confirm(`Remove payment access for ${email}?`)) {
         try {
-          const response = await fetch(`/api/admin/user/${encodeURIComponent(email)}/payment`, {
+          const API_BASE = 'https://spacerender.vercel.app/p';
+          const response = await fetch(`${API_BASE}/api/admin/user/${encodeURIComponent(email)}/payment`, {
             method: 'DELETE'
           });
           

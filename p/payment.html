@@ -55,8 +55,8 @@
       }
 
       try {
-        // Create order on server - using absolute URL for Vercel deployment
-        const API_BASE = 'https://spacerender.vercel.app';
+        // Create order on server - API inside P directory
+        const API_BASE = 'https://spacerender.vercel.app/p';
         const orderResponse = await fetch(`${API_BASE}/api/create-order`, {
           method: 'POST',
           headers: {

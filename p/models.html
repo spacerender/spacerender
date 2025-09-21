@@ -41,7 +41,7 @@
 
       try {
         // Check payment status on server
-        const API_BASE = 'https://spacerender.vercel.app';
+        const API_BASE = 'https://spacerender.vercel.app/p';
         const response = await fetch(`${API_BASE}/api/user/${encodeURIComponent(currentUser.email)}/payment-status`);
         const data = await response.json();
         
@@ -95,7 +95,8 @@
       
       try {
         // Load models from server API
-        const response = await fetch(`/api/models?user_email=${encodeURIComponent(currentUser.email)}`);
+        const API_BASE = 'https://spacerender.vercel.app/p';
+        const response = await fetch(`${API_BASE}/api/models?user_email=${encodeURIComponent(currentUser.email)}`);
         
         if (!response.ok) {
           if (response.status === 403) {

@@ -32,10 +32,21 @@
     const loginBtn = document.getElementById("loginBtn");
     const logoutBtn = document.getElementById("logoutBtn");
     const userInfo = document.getElementById("user-info");
+    
+    // Current user variable
+    let currentUser = null;
 
     // Login
     loginBtn.addEventListener("click", () => {
-      signInWithPopup(auth, provider).catch(err => alert(err.message));
+      console.log("Login button clicked");
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          console.log("Login successful:", result.user.email);
+        })
+        .catch(err => {
+          console.error("Login error:", err);
+          alert(`Login failed: ${err.message}`);
+        });
     });
 
     // Logout
@@ -74,6 +85,7 @@
 
     // Auth state listener
     onAuthStateChanged(auth, (user) => {
+      currentUser = user; // Update global currentUser variable
       const paymentStatus = checkPaymentStatus();
       
       if (user) {

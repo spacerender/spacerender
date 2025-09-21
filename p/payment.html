@@ -69,7 +69,7 @@
           const testResponse = await fetch(`https://spacerender.vercel.app/p/api/create-order`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount: 999, user_email: currentUser.email })
+            body: JSON.stringify({ amount: 99900, user_email: currentUser.email }) // Amount in paisa (999 INR = 99900 paisa)
           });
           useAPI = testResponse.ok;
           console.log('API available:', useAPI);
@@ -86,7 +86,7 @@
           const orderResponse = await fetch(`${API_BASE}/api/create-order`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount: 999, user_email: currentUser.email })
+            body: JSON.stringify({ amount: 99900, user_email: currentUser.email }) // Amount in paisa
           });
           orderData = await orderResponse.json();
           console.log('Server order data:', orderData);
@@ -96,9 +96,10 @@
           orderData = {
             success: true,
             order_id: 'order_local_' + Date.now(),
-            amount: 999,
+            amount: 99900, // Amount in paisa (999 INR = 99900 paisa)
             currency: 'INR',
-            key_id: 'rzp_live_RJn6bJb2qAHcuW'
+            // Use test key for development - replace with live key for production
+            key_id: 'rzp_test_1DP5mmOlF5G5ag' // Test key - change to rzp_live_RJn6bJb2qAHcuW for production
           };
           console.log('Local order data:', orderData);
         }
@@ -108,6 +109,17 @@
         }
         
         console.log('Creating Razorpay options...');
+        
+        // Validate key format
+        if (!orderData.key_id || (!orderData.key_id.startsWith('rzp_test_') && !orderData.key_id.startsWith('rzp_live_'))) {
+          throw new Error('Invalid Razorpay key format: ' + orderData.key_id);
+        }
+        
+        // Validate amount (Razorpay requires amount in paisa, minimum 100 paisa = ₹1)
+        if (!orderData.amount || orderData.amount < 100) {
+          throw new Error('Invalid amount. Minimum amount is ₹1.00 (100 paisa)');
+        }
+        
         const options = {
           "key": orderData.key_id,
           "amount": orderData.amount,
@@ -320,7 +332,7 @@
         </div>
         
         <div class="text-center mb-6">
-          <div class="text-3xl font-bold text-green-400">₹9.99</div>
+          <div class="text-3xl font-bold text-green-400">₹999.00</div>
           <div class="text-sm text-gray-400">One-time payment</div>
         </div>
         

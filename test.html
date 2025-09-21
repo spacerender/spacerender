@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hello World with Google Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center h-screen">
+  <div class="text-center">
+    <h1 class="text-3xl mb-6">🌸 Hello World 🌸</h1>
+    <div id="user-info" class="mb-4">Not logged in.</div>
+    <button id="loginBtn" class="px-4 py-2 bg-blue-600 rounded">Login with Google</button>
+    <button id="logoutBtn" class="px-4 py-2 bg-red-600 rounded hidden">Logout</button>
+  </div>
+
+  <script>
+    // ✅ Your Firebase config (from console)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCqQoBaDkFzrb7SQcQ3KSWz2oI8-qIIRKh",
+      authDomain: "archviz-models.firebaseapp.com",
+      projectId: "archviz-models",
+      storageBucket: "archviz-models.appspot.com",
+      messagingSenderId: "222151849439",
+      appId: "1:222151849439:web:3db8b8239edc4be889806a",
+      measurementId: "G-LL8PNFZFGW"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const provider = new firebase.auth.GoogleAuthProvider();
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const userInfo = document.getElementById("user-info");
+
+    // Login
+    loginBtn.addEventListener("click", () => {
+      auth.signInWithPopup(provider).catch(err => alert(err.message));
+    });
+
+    // Logout
+    logoutBtn.addEventListener("click", () => {
+      auth.signOut();
+    });
+
+    // Listen for auth state
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        userInfo.innerHTML = `✅ Logged in as <b>${user.displayName}</b> (${user.email})`;
+        loginBtn.classList.add("hidden");
+        logoutBtn.classList.remove("hidden");
+      } else {
+        userInfo.innerHTML = "❌ Not logged in.";
+        loginBtn.classList.remove("hidden");
+        logoutBtn.classList.add("hidden");
+      }
+    });
+  </script>
+</body>
+</html>

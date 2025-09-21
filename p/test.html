@@ -54,39 +54,30 @@
       signOut(auth);
     });
 
-    // Check payment status for specific user
-    function checkPaymentStatus() {
+    // Check payment status for specific user (SERVER VERSION)
+    async function checkPaymentStatus() {
       if (!currentUser) {
         return { hasPaid: false };
       }
       
-      // Check payment data for this specific user email (SECURITY FIX)
-      const userPaymentKey = `payment_${currentUser.email}`;
-      const paymentData = localStorage.getItem(userPaymentKey);
-      
-      if (paymentData) {
-        try {
-          const payment = JSON.parse(paymentData);
-          // Verify payment belongs to current user
-          if (payment.status === 'completed' && 
-              payment.user_email === currentUser.email && 
-              payment.payment_id) {
-            return {
-              hasPaid: true,
-              paymentInfo: payment
-            };
-          }
-        } catch (e) {
-          console.error('Error parsing payment data:', e);
-        }
+      try {
+        const response = await fetch(`/api/user/${encodeURIComponent(currentUser.email)}/payment-status`);
+        const data = await response.json();
+        
+        return {
+          hasPaid: data.hasPaid,
+          paymentInfo: data.paymentInfo || null
+        };
+      } catch (error) {
+        console.error('Error checking payment status:', error);
+        return { hasPaid: false };
       }
-      return { hasPaid: false };
     }
 
     // Auth state listener
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       currentUser = user; // Update global currentUser variable
-      const paymentStatus = checkPaymentStatus();
+      const paymentStatus = await checkPaymentStatus();
       
       if (user) {
         if (paymentStatus.hasPaid) {
@@ -118,18 +109,25 @@
       }
     });
 
-    // Clear payment data function (only for current user)
-    window.clearPayment = function() {
-      if (currentUser) {
-        const userPaymentKey = `payment_${currentUser.email}`;
-        localStorage.removeItem(userPaymentKey);
-        
-        // Remove from paid users list
-        const paidUsers = JSON.parse(localStorage.getItem('paid_users') || '[]');
-        const updatedPaidUsers = paidUsers.filter(email => email !== currentUser.email);
-        localStorage.setItem('paid_users', JSON.stringify(updatedPaidUsers));
+    // Clear payment data function (SERVER VERSION)
+    window.clearPayment = async function() {
+      if (currentUser && confirm('Remove your premium access? This action cannot be undone.')) {
+        try {
+          const response = await fetch(`/api/admin/user/${encodeURIComponent(currentUser.email)}/payment`, {
+            method: 'DELETE'
+          });
+          
+          if (response.ok) {
+            alert('Premium access removed successfully');
+            location.reload();
+          } else {
+            alert('Failed to remove premium access');
+          }
+        } catch (error) {
+          console.error('Error removing payment:', error);
+          alert('Error removing premium access');
+        }
       }
-      location.reload();
     };
   </script>
 </head>

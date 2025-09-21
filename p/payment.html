@@ -44,96 +44,137 @@
       }
     });
 
-    // Razorpay configuration
-    const RAZORPAY_KEY_ID = "rzp_live_RJn6bJb2qAHcuW";
+    // Razorpay configuration - Key ID only (secret stays on server)
+    // Key will be provided by server when creating order
     
-    // Payment function
-    window.initiatePayment = function() {
+    // Payment function (SERVER VERSION)
+    window.initiatePayment = async function() {
       if (!currentUser) {
         alert("Please login first!");
         return;
       }
 
-      const amount = 999; // Amount in paise (₹9.99)
-      
-      const options = {
-        "key": RAZORPAY_KEY_ID,
-        "amount": amount,
-        "currency": "INR",
-        "name": "Your Product Name",
-        "description": "Premium Access",
-        "image": "https://via.placeholder.com/150x150?text=Logo",
-        "order_id": "", // You should generate this from backend
-        "handler": function (response) {
-          // Payment successful
-          handlePaymentSuccess(response);
-        },
-        "prefill": {
-          "name": currentUser.displayName,
-          "email": currentUser.email,
-          "contact": ""
-        },
-        "notes": {
-          "user_id": currentUser.uid,
-          "product": "premium_access"
-        },
-        "theme": {
-          "color": "#3399cc"
-        },
-        "modal": {
-          "ondismiss": function() {
-            console.log("Payment cancelled");
-          }
+      try {
+        // Create order on server
+        const orderResponse = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            amount: 999,
+            user_email: currentUser.email
+          })
+        });
+        
+        const orderData = await orderResponse.json();
+        
+        if (!orderData.success) {
+          throw new Error('Failed to create order');
         }
-      };
+        
+        const options = {
+          "key": orderData.key_id,
+          "amount": orderData.amount,
+          "currency": orderData.currency,
+          "name": "SpaceRender SketchUp Models",
+          "description": "Premium Access",
+          "image": "https://via.placeholder.com/150x150?text=SR",
+          "order_id": orderData.order_id,
+          "handler": function (response) {
+            handlePaymentSuccess(response);
+          },
+          "prefill": {
+            "name": currentUser.displayName,
+            "email": currentUser.email,
+            "contact": ""
+          },
+          "notes": {
+            "user_id": currentUser.uid,
+            "product": "premium_access"
+          },
+          "theme": {
+            "color": "#3399cc"
+          },
+          "modal": {
+            "ondismiss": function() {
+              console.log("Payment cancelled");
+            }
+          }
+        };
 
-      const rzp = new Razorpay(options);
-      rzp.on('payment.failed', function (response) {
-        handlePaymentFailure(response);
-      });
-      
-      rzp.open();
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+          handlePaymentFailure(response);
+        });
+        
+        rzp.open();
+        
+      } catch (error) {
+        console.error('Error initiating payment:', error);
+        alert('Failed to initiate payment. Please try again.');
+      }
     };
 
-    function handlePaymentSuccess(response) {
+    async function handlePaymentSuccess(response) {
       console.log("Payment Success:", response);
       
-      // Store payment info tied to specific user email (CRITICAL FIX)
-      const paymentData = {
-        payment_id: response.razorpay_payment_id,
-        order_id: response.razorpay_order_id,
-        signature: response.razorpay_signature,
-        user_id: currentUser.uid,
-        user_email: currentUser.email,
-        timestamp: new Date().toISOString(),
-        status: 'completed'
-      };
-      
-      // Store payment data with user email as key (SECURITY FIX)
-      const userPaymentKey = `payment_${currentUser.email}`;
-      localStorage.setItem(userPaymentKey, JSON.stringify(paymentData));
-      
-      // Also store a list of paid users for admin purposes
-      const paidUsers = JSON.parse(localStorage.getItem('paid_users') || '[]');
-      if (!paidUsers.includes(currentUser.email)) {
-        paidUsers.push(currentUser.email);
-        localStorage.setItem('paid_users', JSON.stringify(paidUsers));
-      }
-      
-      // Show success message
+      // Show processing message
       document.getElementById("payment-status").innerHTML = `
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-          <strong>Payment Successful!</strong><br>
-          Payment ID: ${response.razorpay_payment_id}<br>
-          Account: ${currentUser.email}<br>
-          Redirecting to your dashboard...
+        <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4">
+          <strong>Processing Payment...</strong><br>
+          Please wait while we verify your payment.
         </div>
       `;
       
-      // Redirect to test.html after 3 seconds
-      setTimeout(() => {
-        window.location.href = 'test.html';
-      }, 3000);
+      try {
+        // Verify payment on server
+        const verifyResponse = await fetch('/api/verify-payment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            payment_id: response.razorpay_payment_id,
+            order_id: response.razorpay_order_id,
+            signature: response.razorpay_signature,
+            user_email: currentUser.email,
+            user_id: currentUser.uid
+          })
+        });
+        
+        const verifyData = await verifyResponse.json();
+        
+        if (verifyData.success) {
+          // Payment verified successfully
+          document.getElementById("payment-status").innerHTML = `
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+              <strong>Payment Successful!</strong><br>
+              Payment ID: ${response.razorpay_payment_id}<br>
+              Account: ${currentUser.email}<br>
+              ✅ Verified on server<br>
+              Redirecting to your dashboard...
+            </div>
+          `;
+          
+          // Redirect after 3 seconds
+          setTimeout(() => {
+            window.location.href = 'test.html';
+          }, 3000);
+        } else {
+          throw new Error(verifyData.message || 'Payment verification failed');
+        }
+        
+      } catch (error) {
+        console.error('Payment verification error:', error);
+        document.getElementById("payment-status").innerHTML = `
+          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <strong>Payment Verification Failed!</strong><br>
+            Error: ${error.message}<br>
+            Please contact support with Payment ID: ${response.razorpay_payment_id}
+          </div>
+        `;
+      }
     }
 
     function handlePaymentFailure(response) {

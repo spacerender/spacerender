@@ -33,32 +33,25 @@
       checkAccess();
     });
 
-    function checkAccess() {
-      const paymentData = localStorage.getItem('payment_data');
-      
+    async function checkAccess() {
       if (!currentUser) {
         showAccessDenied("Please login first to access premium models.");
         return;
       }
 
-      // Check payment for current user specifically (SECURITY FIX)
-      const userPaymentKey = `payment_${currentUser.email}`;
-      const userPaymentData = localStorage.getItem(userPaymentKey);
-      
-      if (!userPaymentData) {
-        showAccessDenied("Payment required to access premium models.");
-        return;
-      }
-
       try {
-        const payment = JSON.parse(userPaymentData);
-        if (payment.status === 'completed' && payment.user_email === currentUser.email) {
+        // Check payment status on server
+        const response = await fetch(`/api/user/${encodeURIComponent(currentUser.email)}/payment-status`);
+        const data = await response.json();
+        
+        if (data.hasPaid) {
           showModelsLibrary();
         } else {
-          showAccessDenied("Payment verification failed.");
+          showAccessDenied(data.message || "Payment required to access premium models.");
         }
-      } catch (e) {
-        showAccessDenied("Invalid payment data.");
+      } catch (error) {
+        console.error('Error checking access:', error);
+        showAccessDenied("Error verifying access. Please try again.");
       }
     }
 
@@ -100,28 +93,30 @@
       showLoadingState();
       
       try {
-        // Only load from GitHub repository - no manual models
-        if (MODELS_CONFIG.github.username && MODELS_CONFIG.github.repository) {
-          await loadFromGitHub();
-        } else {
-          // Show message if GitHub not configured
-          document.getElementById("models-content").innerHTML = `
-            <div class="text-center py-12">
-              <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-6 py-4 rounded-lg">
-                <h2 class="text-xl font-bold mb-2">⚠️ Repository Not Configured</h2>
-                <p>Please configure your GitHub repository to load models.</p>
-              </div>
-            </div>
-          `;
+        // Load models from server API
+        const response = await fetch(`/api/models?user_email=${encodeURIComponent(currentUser.email)}`);
+        
+        if (!response.ok) {
+          if (response.status === 403) {
+            const data = await response.json();
+            throw new Error(data.message || 'Premium access required');
+          }
+          throw new Error('Failed to load models');
         }
+        
+        const data = await response.json();
+        displayModels(data.models || []);
+        
       } catch (error) {
         console.error("Error loading models:", error);
         document.getElementById("models-content").innerHTML = `
           <div class="text-center py-12">
             <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
               <h2 class="text-xl font-bold mb-2">❌ Error Loading Models</h2>
-              <p>Failed to load models from GitHub repository.</p>
-              <p class="text-sm mt-2">Error: ${error.message}</p>
+              <p>${error.message}</p>
+              <a href="test.html" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                Back to Dashboard
+              </a>
             </div>
           </div>
         `;

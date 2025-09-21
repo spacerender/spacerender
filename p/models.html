@@ -39,30 +39,19 @@
         return;
       }
 
-      try {
-        // Try server API first
-        const API_BASE = 'https://spacerender.vercel.app/p';
-        const response = await fetch(`${API_BASE}/api/user/${encodeURIComponent(currentUser.email)}/payment-status`);
-        
-        if (response.ok) {
-          const data = await response.json();
-          if (data.hasPaid) {
-            showModelsLibrary();
-            return;
-          }
-        }
-      } catch (error) {
-        console.log('Server API not available, checking local storage');
-      }
+      // Local-only payment check (no server API)
+      console.log('Checking local payment status for user:', currentUser.email);
       
-      // Fallback: Check localStorage with user-specific key
+      // Check localStorage with user-specific key
       const userPaymentKey = `payment_${currentUser.email}`;
       const userPaymentData = localStorage.getItem(userPaymentKey);
       
       if (userPaymentData) {
         try {
           const payment = JSON.parse(userPaymentData);
+          console.log('Found payment data:', payment);
           if (payment.status === 'completed' && payment.user_email === currentUser.email) {
+            console.log('Payment verified locally for user:', currentUser.email);
             showModelsLibrary();
             return;
           }
@@ -71,6 +60,7 @@
         }
       }
       
+      console.log('No valid payment found for user:', currentUser.email);
       showAccessDenied("Payment required to access premium models.");
     }
 
@@ -111,21 +101,9 @@
     async function loadModels() {
       showLoadingState();
       
-      try {
-        // Try server API first
-        const API_BASE = 'https://spacerender.vercel.app/p';
-        const response = await fetch(`${API_BASE}/api/models?user_email=${encodeURIComponent(currentUser.email)}`);
-        
-        if (response.ok) {
-          const data = await response.json();
-          displayModels(data.models || []);
-          return;
-        }
-      } catch (error) {
-        console.log('Server API not available, loading from GitHub directly');
-      }
+      console.log('Loading models directly from GitHub (local-only mode)...');
       
-      // Fallback: Load directly from GitHub API
+      // Load directly from GitHub API (no server)
       try {
         const githubResponse = await fetch(
           'https://api.github.com/repos/spacerender/sketchup-models/git/trees/main?recursive=1'
@@ -136,11 +114,14 @@
         }
         
         const data = await githubResponse.json();
+        console.log('GitHub data loaded:', data.tree.length, 'files found');
         
         // Filter and process .skp files
         const skpFiles = data.tree.filter(file => 
           file.path.endsWith('.skp') && file.type === 'blob'
         );
+        
+        console.log('SketchUp files found:', skpFiles.length);
         
         const models = skpFiles.map(file => {
           const pathParts = file.path.split('/');
@@ -162,6 +143,7 @@
           };
         });
         
+        console.log('Models processed:', models.length);
         displayModels(models);
         
       } catch (error) {

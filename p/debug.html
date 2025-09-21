@@ -51,7 +51,7 @@
       resultsDiv.innerHTML = '<p class="text-blue-400">Testing APIs...</p>';
       
       const endpoints = [
-        { name: 'Create Order', url: '/api/create-order', method: 'POST', body: { amount: 999, user_email: 'test@example.com' } },
+        { name: 'Create Order', url: '/api/create-order', method: 'POST', body: { amount: 100, user_email: 'test@example.com' } },
         { name: 'Verify Payment', url: '/api/verify-payment', method: 'POST', body: { payment_id: 'test', order_id: 'test', signature: 'test', user_email: 'test@example.com' } },
         { name: 'Models', url: '/api/models', method: 'GET', params: '?user_email=test@example.com' },
         { name: 'Payment Status', url: '/api/user/test@example.com/payment-status', method: 'GET' },

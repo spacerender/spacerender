@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hello World with Google Login</title>
+  <title>Hello World with Google Login & Razorpay</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Firebase SDKs (Modular) -->
   <script type="module">
-    // Import Firebase functions
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } 
       from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-    // ✅ Your Firebase config (fixed storageBucket)
     const firebaseConfig = {
       apiKey: "AIzaSyC0QGaDKrKzb7SGcQ3K3Sw2oI8-qIIRkHs",
       authDomain: "archviz-models.firebaseapp.com",
@@ -23,36 +21,64 @@
       measurementId: "G-LL0PFNZFGW"
     };
 
-    // Init Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // DOM elements
     const loginBtn = document.getElementById("loginBtn");
     const logoutBtn = document.getElementById("logoutBtn");
     const userInfo = document.getElementById("user-info");
+    const productDiv = document.getElementById("product");
+    const buyBtn = document.getElementById("buyBtn");
 
-    // Login
     loginBtn.addEventListener("click", () => {
       signInWithPopup(auth, provider).catch(err => alert(err.message));
     });
 
-    // Logout
     logoutBtn.addEventListener("click", () => {
       signOut(auth);
     });
 
-    // Auth state listener
     onAuthStateChanged(auth, (user) => {
       if (user) {
         userInfo.innerHTML = `✅ Logged in as <b>${user.displayName}</b> (${user.email})`;
         loginBtn.classList.add("hidden");
         logoutBtn.classList.remove("hidden");
+        productDiv.classList.remove("hidden");
       } else {
         userInfo.innerHTML = "❌ Not logged in.";
         loginBtn.classList.remove("hidden");
         logoutBtn.classList.add("hidden");
+        productDiv.classList.add("hidden");
+      }
+    });
+
+    buyBtn.addEventListener("click", async () => {
+      try {
+        const res = await fetch("/api/create-order", { method: "POST" });
+        const order = await res.json();
+
+        const options = {
+          key: "rzp_live_RJn6bJb2qAHcuW",
+          amount: order.amount,
+          currency: order.currency,
+          name: "Special Item",
+          description: "Purchase of special item",
+          order_id: order.id,
+          handler: function (response){
+            alert("🌸 Payment Successful! Payment ID: " + response.razorpay_payment_id);
+          },
+          prefill: {
+            email: auth.currentUser.email,
+            name: auth.currentUser.displayName
+          },
+          theme: { color: "#3399cc" }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } catch (err) {
+        alert("Error creating order: " + err.message);
       }
     });
   </script>
@@ -63,6 +89,14 @@
     <div id="user-info" class="mb-4">Not logged in.</div>
     <button id="loginBtn" class="px-4 py-2 bg-blue-600 rounded">Login with Google</button>
     <button id="logoutBtn" class="px-4 py-2 bg-red-600 rounded hidden">Logout</button>
+
+    <!-- Product -->
+    <div id="product" class="hidden mt-6">
+      <h2 class="text-xl mb-2">Special Item - ₹1</h2>
+      <button id="buyBtn" class="px-4 py-2 bg-green-600 rounded">Buy Now</button>
+    </div>
   </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </body>
 </html>

@@ -40,20 +40,38 @@
       }
 
       try {
-        // Check payment status on server
+        // Try server API first
         const API_BASE = 'https://spacerender.vercel.app/p';
         const response = await fetch(`${API_BASE}/api/user/${encodeURIComponent(currentUser.email)}/payment-status`);
-        const data = await response.json();
         
-        if (data.hasPaid) {
-          showModelsLibrary();
-        } else {
-          showAccessDenied(data.message || "Payment required to access premium models.");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.hasPaid) {
+            showModelsLibrary();
+            return;
+          }
         }
       } catch (error) {
-        console.error('Error checking access:', error);
-        showAccessDenied("Error verifying access. Please try again.");
+        console.log('Server API not available, checking local storage');
       }
+      
+      // Fallback: Check localStorage with user-specific key
+      const userPaymentKey = `payment_${currentUser.email}`;
+      const userPaymentData = localStorage.getItem(userPaymentKey);
+      
+      if (userPaymentData) {
+        try {
+          const payment = JSON.parse(userPaymentData);
+          if (payment.status === 'completed' && payment.user_email === currentUser.email) {
+            showModelsLibrary();
+            return;
+          }
+        } catch (e) {
+          console.error('Error parsing payment data:', e);
+        }
+      }
+      
+      showAccessDenied("Payment required to access premium models.");
     }
 
     function showAccessDenied(message) {
@@ -94,20 +112,57 @@
       showLoadingState();
       
       try {
-        // Load models from server API
+        // Try server API first
         const API_BASE = 'https://spacerender.vercel.app/p';
         const response = await fetch(`${API_BASE}/api/models?user_email=${encodeURIComponent(currentUser.email)}`);
         
-        if (!response.ok) {
-          if (response.status === 403) {
-            const data = await response.json();
-            throw new Error(data.message || 'Premium access required');
-          }
-          throw new Error('Failed to load models');
+        if (response.ok) {
+          const data = await response.json();
+          displayModels(data.models || []);
+          return;
+        }
+      } catch (error) {
+        console.log('Server API not available, loading from GitHub directly');
+      }
+      
+      // Fallback: Load directly from GitHub API
+      try {
+        const githubResponse = await fetch(
+          'https://api.github.com/repos/spacerender/sketchup-models/git/trees/main?recursive=1'
+        );
+        
+        if (!githubResponse.ok) {
+          throw new Error(`GitHub API error: ${githubResponse.status}`);
         }
         
-        const data = await response.json();
-        displayModels(data.models || []);
+        const data = await githubResponse.json();
+        
+        // Filter and process .skp files
+        const skpFiles = data.tree.filter(file => 
+          file.path.endsWith('.skp') && file.type === 'blob'
+        );
+        
+        const models = skpFiles.map(file => {
+          const pathParts = file.path.split('/');
+          const fileName = pathParts[pathParts.length - 1];
+          const category = pathParts[0] || 'Uncategorized';
+          const modelName = fileName.replace('.skp', '').replace(/[-_]/g, ' ');
+          
+          return {
+            id: `github_${file.sha.substring(0, 8)}`,
+            name: modelName.charAt(0).toUpperCase() + modelName.slice(1),
+            description: `SketchUp model from ${category} collection`,
+            size: "GitHub hosted",
+            category: category.charAt(0).toUpperCase() + category.slice(1),
+            tags: ["sketchup", "model", category.toLowerCase()],
+            thumbnail: `https://raw.githubusercontent.com/spacerender/sketchup-models/main/thumbnails/${fileName.replace('.skp', '')}.jpg`,
+            downloadUrl: `https://github.com/spacerender/sketchup-models/raw/main/${file.path}`,
+            previewUrl: `https://github.com/spacerender/sketchup-models/blob/main/${file.path}`,
+            dateAdded: new Date().toISOString().split('T')[0]
+          };
+        });
+        
+        displayModels(models);
         
       } catch (error) {
         console.error("Error loading models:", error);
@@ -115,7 +170,8 @@
           <div class="text-center py-12">
             <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
               <h2 class="text-xl font-bold mb-2">❌ Error Loading Models</h2>
-              <p>${error.message}</p>
+              <p>Failed to load models from both server and GitHub.</p>
+              <p class="text-sm mt-2">Error: ${error.message}</p>
               <a href="test.html" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                 Back to Dashboard
               </a>

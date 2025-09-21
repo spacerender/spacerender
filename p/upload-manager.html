@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SketchUp Models Upload Manager</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-3xl font-bold mb-6">🚀 SketchUp Models Upload Manager</h1>
+      
+      <!-- GitHub Settings -->
+      <div class="bg-gray-800 rounded-lg p-6 mb-6">
+        <h2 class="text-xl mb-4">🐙 GitHub Configuration</h2>
+        <div class="grid md:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium mb-2">GitHub Username</label>
+            <input type="text" id="github-username" value="spacerender"
+                   class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
+                   placeholder="your-username">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Repository Name</label>
+            <input type="text" id="github-repo" value="sketchup-models"
+                   class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Branch</label>
+            <input type="text" id="github-branch" value="main"
+                   class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white">
+          </div>
+        </div>
+        <button onclick="updateGitHubConfig()" class="px-4 py-2 bg-purple-600 rounded hover:bg-purple-700">
+          Update GitHub Config
+        </button>
+        <div id="github-config-status" class="mt-2 text-sm"></div>
+      </div>
+      <div class="bg-gray-800 rounded-lg p-6 mb-6">
+        <h2 class="text-xl mb-4">📋 Current Models</h2>
+        <div id="current-models" class="space-y-2">
+          <!-- Will be populated by JavaScript -->
+        </div>
+        <button onclick="loadCurrentModels()" class="mt-4 px-4 py-2 bg-blue-600 rounded hover:bg-blue-700">
+          Refresh List
+        </button>
+      </div>
+      
+      <!-- Add New Model Form -->
+      <div class="bg-gray-800 rounded-lg p-6 mb-6">
+        <h2 class="text-xl mb-4">➕ Add New Model</h2>
+        <form id="add-model-form" class="space-y-4">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium mb-2">Model Name *</label>
+              <input type="text" id="model-name" required 
+                     class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
+                     placeholder="Modern Villa Design">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Category *</label>
+              <select id="model-category" required 
+                      class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white">
+                <option value="">Select Category</option>
+                <option value="Residential">Residential</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Interior">Interior</option>
+                <option value="Landscaping">Landscaping</option>
+                <option value="Industrial">Industrial</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium mb-2">Description *</label>
+            <textarea id="model-description" rows="3" required
+                      class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
+                      placeholder="Detailed description of the SketchUp model..."></textarea>
+          </div>
+          
+          <div class="grid md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-medium mb-2">File Size</label>
+              <input type="text" id="model-size" 
+                     class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
+                     placeholder="2.5 MB">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Download URL *</label>
+              <input type="url" id="model-download-url" required 
+                     class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
+                     placeholder="Will be auto-generated from GitHub settings">
+              <button type="button" onclick="generateGitHubUrls()" class="mt-1 px-2 py-1 bg-blue-600 rounded text-xs hover:bg-blue-700">
+                Auto-Generate GitHub URLs
+              </button>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Preview URL</label>
+              <input type="url" id="model-preview-url" 
+                     class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
+                     placeholder="Will be auto-generated from GitHub settings">
+            </div>
+          </div>
+          
+          <div class="grid md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium mb-2">GitHub File Path</label>
+              <input type="text" id="github-file-path" 
+                     class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
+                     placeholder="e.g., residential/modern-house.skp">
+              <div class="text-xs text-gray-400 mt-1">Format: folder/filename.skp</div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Thumbnail URL</label>
+              <input type="url" id="model-thumbnail" 
+                     class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
+                     placeholder="Will be auto-generated for GitHub thumbnails">
+            </div>
+          </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Tags (comma-separated)</label>
+              <input type="text" id="model-tags" 
+                     class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
+                     placeholder="modern, villa, residential, luxury">
+            </div>
+          </div>
+          
+          <div class="pt-4">
+            <button type="submit" class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold">
+              Add Model to Collection
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Generated Code Output -->
+      <div class="bg-gray-800 rounded-lg p-6 mb-6">
+        <h2 class="text-xl mb-4">📝 Generated Code</h2>
+        <p class="text-gray-400 mb-4">Copy this code and add it to the models array in models.html:</p>
+        <div class="bg-gray-900 rounded p-4 relative">
+          <button onclick="copyCode()" class="absolute top-2 right-2 px-3 py-1 bg-blue-600 rounded text-sm hover:bg-blue-700">
+            Copy
+          </button>
+          <pre id="generated-code" class="text-green-400 text-sm overflow-x-auto pr-16">
+// Add your first model to see generated code here
+          </pre>
+        </div>
+      </div>
+      
+      <!-- Bulk Upload Helper -->
+      <div class="bg-gray-800 rounded-lg p-6">
+        <h2 class="text-xl mb-4">📦 Bulk Upload Helper</h2>
+        <p class="text-gray-400 mb-4">Generate multiple model entries from a list:</p>
+        <textarea id="bulk-input" rows="6" 
+                  class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white mb-4"
+                  placeholder="Paste your model list here, one per line:
+Model Name 1 | Category | Description | Download URL
+Model Name 2 | Category | Description | Download URL
+..."></textarea>
+        <button onclick="processBulkUpload()" class="px-4 py-2 bg-purple-600 rounded hover:bg-purple-700">
+          Generate Bulk Code
+        </button>
+        <div id="bulk-output" class="mt-4 hidden">
+          <div class="bg-gray-900 rounded p-4 relative">
+            <button onclick="copyBulkCode()" class="absolute top-2 right-2 px-3 py-1 bg-blue-600 rounded text-sm hover:bg-blue-700">
+              Copy All
+            </button>
+            <pre id="bulk-generated-code" class="text-green-400 text-sm overflow-x-auto pr-16"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let modelCounter = 100; // Start from 100 to avoid conflicts with existing models
+    
+    // GitHub configuration
+    let githubConfig = {
+      username: 'spacerender',
+      repository: 'sketchup-models',
+      branch: 'main'
+    };
+    
+    // Update GitHub configuration
+    function updateGitHubConfig() {
+      githubConfig.username = document.getElementById('github-username').value;
+      githubConfig.repository = document.getElementById('github-repo').value;
+      githubConfig.branch = document.getElementById('github-branch').value;
+      
+      localStorage.setItem('github-config', JSON.stringify(githubConfig));
+      
+      document.getElementById('github-config-status').innerHTML = `
+        <div class="text-green-400">
+          ✅ GitHub config saved: ${githubConfig.username}/${githubConfig.repository}
+        </div>
+      `;
+    }
+    
+    // Load saved GitHub config
+    function loadGitHubConfig() {
+      const saved = localStorage.getItem('github-config');
+      if (saved) {
+        githubConfig = JSON.parse(saved);
+        document.getElementById('github-username').value = githubConfig.username;
+        document.getElementById('github-repo').value = githubConfig.repository;
+        document.getElementById('github-branch').value = githubConfig.branch;
+      }
+    }
+    
+    // Generate GitHub URLs automatically
+    function generateGitHubUrls() {
+      const filePath = document.getElementById('github-file-path').value;
+      const modelName = document.getElementById('model-name').value;
+      
+      if (!githubConfig.username) {
+        alert('Please set your GitHub username first!');
+        return;
+      }
+      
+      if (!filePath) {
+        alert('Please enter the GitHub file path (e.g., residential/model-name.skp)');
+        return;
+      }
+      
+      const { username, repository, branch } = githubConfig;
+      
+      // Generate URLs
+      const downloadUrl = `https://github.com/${username}/${repository}/raw/${branch}/${filePath}`;
+      const previewUrl = `https://github.com/${username}/${repository}/blob/${branch}/${filePath}`;
+      const thumbnailUrl = `https://raw.githubusercontent.com/${username}/${repository}/${branch}/thumbnails/${filePath.split('/').pop().replace('.skp', '')}.jpg`;
+      
+      // Update form fields
+      document.getElementById('model-download-url').value = downloadUrl;
+      document.getElementById('model-preview-url').value = previewUrl;
+      document.getElementById('model-thumbnail').value = thumbnailUrl;
+      
+      showToast('GitHub URLs generated successfully!');
+    }
+    
+    // Load and display current models
+    function loadCurrentModels() {
+      // This would normally fetch from your models.html file
+      // For now, showing placeholder
+      document.getElementById('current-models').innerHTML = `
+        <div class="text-gray-400 text-sm">
+          <p>📁 Current models will be listed here</p>
+          <p>👉 To see actual models, check your models.html file</p>
+        </div>
+      `;
+    }
+    
+    // Handle form submission
+    document.getElementById('add-model-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      generateModelCode();
+    });
+    
+    function generateModelCode() {
+      const name = document.getElementById('model-name').value;
+      const category = document.getElementById('model-category').value;
+      const description = document.getElementById('model-description').value;
+      const size = document.getElementById('model-size').value || 'Unknown size';
+      const downloadUrl = document.getElementById('model-download-url').value;
+      const previewUrl = document.getElementById('model-preview-url').value || downloadUrl;
+      const thumbnail = document.getElementById('model-thumbnail').value || 'https://via.placeholder.com/300x200?text=SketchUp+Model';
+      const tagsInput = document.getElementById('model-tags').value;
+      const tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()) : ['sketchup', 'model'];
+      
+      if (!name || !category || !description || !downloadUrl) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      const modelCode = `{
+  id: ${modelCounter++},
+  name: "${name}",
+  description: "${description}",
+  size: "${size}",
+  category: "${category}",
+  tags: ${JSON.stringify(tags)},
+  thumbnail: "${thumbnail}",
+  downloadUrl: "${downloadUrl}",
+  previewUrl: "${previewUrl}",
+  dateAdded: "${new Date().toISOString().split('T')[0]}"
+},`;
+      
+      document.getElementById('generated-code').textContent = modelCode;
+      
+      // Clear form
+      document.getElementById('add-model-form').reset();
+      
+      // Show success message
+      showSuccessMessage();
+    }
+    
+    function copyCode() {
+      const code = document.getElementById('generated-code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('Code copied to clipboard!');
+      });
+    }
+    
+    function processBulkUpload() {
+      const bulkInput = document.getElementById('bulk-input').value;
+      if (!bulkInput.trim()) {
+        alert('Please enter some model data');
+        return;
+      }
+      
+      const lines = bulkInput.trim().split('\n');
+      let bulkCode = '';
+      
+      lines.forEach(line => {
+        const parts = line.split('|').map(part => part.trim());
+        if (parts.length >= 4) {
+          const [name, category, description, downloadUrl] = parts;
+          const previewUrl = parts[4] || downloadUrl;
+          const size = parts[5] || 'Unknown size';
+          
+          bulkCode += `{
+  id: ${modelCounter++},
+  name: "${name}",
+  description: "${description}",
+  size: "${size}",
+  category: "${category}",
+  tags: ["sketchup", "model", "${category.toLowerCase()}"],
+  thumbnail: "https://via.placeholder.com/300x200?text=${encodeURIComponent(name)}",
+  downloadUrl: "${downloadUrl}",
+  previewUrl: "${previewUrl}",
+  dateAdded: "${new Date().toISOString().split('T')[0]}"
+},
+
+`;
+        }
+      });
+      
+      if (bulkCode) {
+        document.getElementById('bulk-generated-code').textContent = bulkCode;
+        document.getElementById('bulk-output').classList.remove('hidden');
+      } else {
+        alert('No valid model data found. Please check the format.');
+      }
+    }
+    
+    function copyBulkCode() {
+      const code = document.getElementById('bulk-generated-code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('Bulk code copied to clipboard!');
+      });
+    }
+    
+    function showSuccessMessage() {
+      showToast('Model code generated! Copy and paste it into models.html');
+    }
+    
+    function showToast(message) {
+      // Create toast notification
+      const toast = document.createElement('div');
+      toast.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        document.body.removeChild(toast);
+      }, 3000);
+    }
+    
+    // Load current models on page load
+    loadCurrentModels();
+    loadGitHubConfig();
+  </script>
+</body>
+</html>

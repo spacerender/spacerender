@@ -83,7 +83,7 @@
       loadModels();
     }
 
-    // Models configuration - UPDATE THIS SECTION TO ADD NEW MODELS
+    // Models configuration - GitHub repository only
     const MODELS_CONFIG = {
       // GitHub repository settings
       github: {
@@ -92,61 +92,39 @@
         branch: "main" // or "master" depending on your default branch
       },
       
-      // Your SketchUp models - Add new models here
-      models: [
-        {
-          id: 1,
-          name: "Modern House Design",
-          description: "Contemporary residential architecture with clean lines",
-          size: "2.5 MB",
-          category: "Residential",
-          tags: ["modern", "house", "residential"],
-          thumbnail: "https://raw.githubusercontent.com/spacerender/sketchup-models/main/thumbnails/modern-house.jpg",
-          downloadUrl: "https://github.com/spacerender/sketchup-models/raw/main/residential/modern-house.skp",
-          previewUrl: "https://github.com/spacerender/sketchup-models/blob/main/residential/modern-house.skp",
-          dateAdded: "2024-01-15"
-        },
-        {
-          id: 2,
-          name: "Office Building Complex",
-          description: "Multi-story commercial office building with parking",
-          size: "4.1 MB",
-          category: "Commercial",
-          tags: ["office", "commercial", "building"],
-          thumbnail: "https://raw.githubusercontent.com/spacerender/sketchup-models/main/thumbnails/office-building.jpg",
-          downloadUrl: "https://github.com/spacerender/sketchup-models/raw/main/commercial/office-building.skp",
-          previewUrl: "https://github.com/spacerender/sketchup-models/blob/main/commercial/office-building.skp",
-          dateAdded: "2024-01-20"
-        },
-        {
-          id: 3,
-          name: "Interior Living Room",
-          description: "Fully furnished modern living room with detailed textures",
-          size: "3.2 MB",
-          category: "Interior",
-          tags: ["interior", "living room", "furniture"],
-          thumbnail: "https://raw.githubusercontent.com/spacerender/sketchup-models/main/thumbnails/living-room.jpg",
-          downloadUrl: "https://github.com/spacerender/sketchup-models/raw/main/interior/living-room.skp",
-          previewUrl: "https://github.com/spacerender/sketchup-models/blob/main/interior/living-room.skp",
-          dateAdded: "2024-01-25"
-        }
-      ]
+      // No manual models - only GitHub repository content will be shown
+      models: []
     };
 
     async function loadModels() {
       showLoadingState();
       
       try {
-        // Try to load from GitHub API first (if configured)
+        // Only load from GitHub repository - no manual models
         if (MODELS_CONFIG.github.username && MODELS_CONFIG.github.repository) {
           await loadFromGitHub();
         } else {
-          // Fall back to manual list
-          displayModels(MODELS_CONFIG.models);
+          // Show message if GitHub not configured
+          document.getElementById("models-content").innerHTML = `
+            <div class="text-center py-12">
+              <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-6 py-4 rounded-lg">
+                <h2 class="text-xl font-bold mb-2">⚠️ Repository Not Configured</h2>
+                <p>Please configure your GitHub repository to load models.</p>
+              </div>
+            </div>
+          `;
         }
       } catch (error) {
         console.error("Error loading models:", error);
-        displayModels(MODELS_CONFIG.models); // Fallback to manual list
+        document.getElementById("models-content").innerHTML = `
+          <div class="text-center py-12">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-lg">
+              <h2 class="text-xl font-bold mb-2">❌ Error Loading Models</h2>
+              <p>Failed to load models from GitHub repository.</p>
+              <p class="text-sm mt-2">Error: ${error.message}</p>
+            </div>
+          </div>
+        `;
       }
     }
 
@@ -187,15 +165,8 @@
         };
       });
       
-      // Combine GitHub auto-detected models with manual models (FIXED)
-      const allModels = [...MODELS_CONFIG.models, ...githubModels];
-      
-      // Remove duplicates based on download URL
-      const uniqueModels = allModels.filter((model, index, self) => 
-        index === self.findIndex(m => m.downloadUrl === model.downloadUrl)
-      );
-      
-      displayModels(uniqueModels);
+      // Only show GitHub repository models - no manual models
+      displayModels(githubModels);
     }
 
     function formatFileSize(bytes) {

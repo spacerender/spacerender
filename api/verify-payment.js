@@ -1,1 +1,91 @@
-<!doctype html> <html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <title>Hello World with Google Login</title> <script src="https://cdn.tailwindcss.com"></script> <!-- Firebase SDKs (Modular) --> <script type="module"> // Import Firebase functions import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"; import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js"; // ✅ Your Firebase config (fixed storageBucket) const firebaseConfig = { apiKey: "AIzaSyC0QGaDKrKzb7SGcQ3K3Sw2oI8-qIIRkHs", authDomain: "archviz-models.firebaseapp.com", projectId: "archviz-models", storageBucket: "archviz-models.appspot.com", messagingSenderId: "222151849439", appId: "1:222151849439:web:3db08b239edc40e889806a", measurementId: "G-LL0PFNZFGW" }; // Init Firebase const app = initializeApp(firebaseConfig); const auth = getAuth(app); const provider = new GoogleAuthProvider(); // DOM elements const loginBtn = document.getElementById("loginBtn"); const logoutBtn = document.getElementById("logoutBtn"); const userInfo = document.getElementById("user-info"); // Login loginBtn.addEventListener("click", () => { signInWithPopup(auth, provider).catch(err => alert(err.message)); }); // Logout logoutBtn.addEventListener("click", () => { signOut(auth); }); // Auth state listener onAuthStateChanged(auth, (user) => { if (user) { userInfo.innerHTML = ✅ Logged in as <b>${user.displayName}</b> (${user.email}); loginBtn.classList.add("hidden"); logoutBtn.classList.remove("hidden"); } else { userInfo.innerHTML = "❌ Not logged in."; loginBtn.classList.remove("hidden"); logoutBtn.classList.add("hidden"); } }); </script> </head> <body class="bg-gray-900 text-white flex items-center justify-center h-screen"> <div class="text-center"> <h1 class="text-3xl mb-6">🌸 Hello World 🌸</h1> <div id="user-info" class="mb-4">Not logged in.</div> <button id="loginBtn" class="px-4 py-2 bg-blue-600 rounded">Login with Google</button> <button id="logoutBtn" class="px-4 py-2 bg-red-600 rounded hidden">Logout</button> </div> </body> </html>
+// Vercel Serverless Function: /api/verify-payment
+import crypto from 'crypto';
+
+// In-memory storage for demo (replace with real database)
+const paymentDatabase = new Map();
+const userDatabase = new Map();
+
+export default async function handler(req, res) {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  try {
+    const { payment_id, order_id, signature, user_email, user_id } = req.body;
+    
+    if (!payment_id || !order_id || !signature || !user_email) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Missing required payment data' 
+      });
+    }
+
+    // Get Razorpay secret from environment variables
+    const razorpaySecret = process.env.RAZORPAY_KEY_SECRET || 'AlFTUDhCuU71YO2I3Qqy7M2E';
+    
+    // Verify signature (CRITICAL SECURITY STEP)
+    const body = order_id + "|" + payment_id;
+    const expectedSignature = crypto
+      .createHmac('sha256', razorpaySecret)
+      .update(body.toString())
+      .digest('hex');
+    
+    if (expectedSignature !== signature) {
+      console.error('Payment verification failed - invalid signature');
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Payment verification failed - invalid signature' 
+      });
+    }
+    
+    // Store payment data
+    const paymentData = {
+      payment_id,
+      order_id,
+      signature,
+      user_id,
+      user_email,
+      status: 'completed',
+      timestamp: new Date().toISOString(),
+      amount: 999, // Amount in paise
+      verified: true
+    };
+    
+    // Store in database (replace with real database)
+    paymentDatabase.set(payment_id, paymentData);
+    paymentDatabase.set(user_email, paymentData); // Also store by email for quick lookup
+    
+    // Store/update user data
+    userDatabase.set(user_email, {
+      user_id,
+      user_email,
+      has_premium: true,
+      payment_id,
+      last_login: new Date().toISOString()
+    });
+    
+    console.log(`✅ Payment verified for ${user_email}: ${payment_id}`);
+    
+    res.json({
+      success: true,
+      message: 'Payment verified successfully',
+      payment_id
+    });
+    
+  } catch (error) {
+    console.error('Error verifying payment:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Payment verification failed: ' + error.message 
+    });
+  }
+}

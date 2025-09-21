@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Hello World with Google Login & Razorpay</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Firebase SDKs (Modular) -->
+  <!-- Firebase SDKs -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } 
       from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
+    // 🔥 Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyC0QGaDKrKzb7SGcQ3K3Sw2oI8-qIIRkHs",
       authDomain: "archviz-models.firebaseapp.com",
@@ -31,14 +32,17 @@
     const productDiv = document.getElementById("product");
     const buyBtn = document.getElementById("buyBtn");
 
+    // Google Login
     loginBtn.addEventListener("click", () => {
       signInWithPopup(auth, provider).catch(err => alert(err.message));
     });
 
+    // Logout
     logoutBtn.addEventListener("click", () => {
       signOut(auth);
     });
 
+    // Auth State
     onAuthStateChanged(auth, (user) => {
       if (user) {
         userInfo.innerHTML = `✅ Logged in as <b>${user.displayName}</b> (${user.email})`;
@@ -53,24 +57,25 @@
       }
     });
 
+    // Razorpay Checkout
     buyBtn.addEventListener("click", async () => {
       try {
         const res = await fetch("/api/create-order", { method: "POST" });
         const order = await res.json();
 
         const options = {
-          key: "rzp_live_RJn6bJb2qAHcuW",
+          key: window.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_xxx", // ✅ exposed in Vercel env
           amount: order.amount,
           currency: order.currency,
           name: "Special Item",
           description: "Purchase of special item",
           order_id: order.id,
-          handler: function (response){
+          handler: function (response) {
             alert("🌸 Payment Successful! Payment ID: " + response.razorpay_payment_id);
           },
           prefill: {
-            email: auth.currentUser.email,
-            name: auth.currentUser.displayName
+            email: auth.currentUser?.email || "",
+            name: auth.currentUser?.displayName || ""
           },
           theme: { color: "#3399cc" }
         };
